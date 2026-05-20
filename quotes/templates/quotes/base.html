@@ -1,0 +1,30 @@
+{% load static %}
+
+<html>
+    <head>
+        <title>Quote of the Day</title>
+        <link rel="stylesheet" href="{% static 'styles-quotes.css' %}">
+    </head>
+    <body class="body">
+        <div class="trueMain">
+            <div class="mainH">
+                <nav class="nav">
+                    <a href="{% url 'quote' %}" class="navItem">Quote of the Day</a>
+                    <a href="{% url 'show_all' %}" class="navItem">All Quotes</a>
+                    <a href="{% url 'about' %}" class="navItem">About</a>
+                </nav>
+            </div>
+            <div class="mainQuote">
+                <!-- Put page specific content here-->
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+        <div>
+            <footer class="footer">
+                Page created by nsent01@bu.edu <br>
+                Generated at: {{time}}
+            </footer>
+        </div>
+    </body>
+</html>

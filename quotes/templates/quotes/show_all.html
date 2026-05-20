@@ -1,0 +1,20 @@
+{% extends 'quotes/base.html' %}
+
+{% block content %}
+    <div>
+        <main class="main">
+            <section class="mainBody">
+                <h2 class="title">Kyrie Irving Quote of the Day</h2>
+                {% for quote, img in quotes %}
+                    <div class="quoteLine">
+                            <img src={{img}} class="quoteImage">
+                        
+                            <div class="generate">
+                                <p class="quote">{{quote}}</p>
+                            </div>
+                    </div>
+                {% endfor %}
+            </section>
+        </main>
+    </div>
+{% endblock %}
