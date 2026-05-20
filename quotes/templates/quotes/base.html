@@ -1,12 +1,19 @@
 {% load static %}
 
 <html>
+    <!--
+        File: base.html
+        Author: Senthilvel Nithin (nsent01@bu.edu), 5/18/2026
+        Description: Our base template for other html pages
+        with navigation and footer elements
+    -->
     <head>
         <title>Quote of the Day</title>
         <link rel="stylesheet" href="{% static 'styles-quotes.css' %}">
     </head>
     <body class="body">
         <div class="trueMain">
+            <!--Nav bar-->
             <div class="mainH">
                 <nav class="nav">
                     <a href="{% url 'quote' %}" class="navItem">Quote of the Day</a>
@@ -14,12 +21,14 @@
                     <a href="{% url 'about' %}" class="navItem">About</a>
                 </nav>
             </div>
+            <!--Main body pages-->
             <div class="mainQuote">
                 <!-- Put page specific content here-->
                 {% block content %}
                 {% endblock %}
             </div>
         </div>
+        <!--Footer-->
         <div>
             <footer class="footer">
                 Page created by nsent01@bu.edu <br>

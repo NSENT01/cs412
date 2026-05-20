@@ -1,3 +1,7 @@
+# File: views.py
+# Author: Nithin Senthilvel (nsent01@bu.edu), 5/18/2026
+# Description: API for rendering HTML webpage
+
 from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse
 import random
@@ -30,38 +34,56 @@ image_urls = [
 
 def home(request):
     '''Respond the URL '', delegate task to a template'''
+    # delegate to html template
     template = "quotes/quote.html"
     context = {
         "rquote": quotes[random.randrange(len(quotes))],
         "rimage": image_urls[random.randrange(len(image_urls))],
         "time": time.ctime(),
     }
+
+    # return the rendered page
     return render(request, template, context)
 
 def quote(request):
     '''Respond to the URL 'quote', delegate task to a template'''
+    # delegate to html template
     template = "quotes/quote.html"
+
+    # feed appropriate context for page rendering
     context = {
         "rquote": quotes[random.randrange(len(quotes))],
         "rimage": image_urls[random.randrange(len(image_urls))],
         "time": time.ctime(),
     }
+
+    # return the rendered page
     return render(request, template, context)
 
 def about(request):
     '''Respond to the URL 'about', delegate task to a template'''
+    # delegate to html template
     template = "quotes/about.html"
+
+    # feed appropriate context for page rendering
     context = {
         "time": time.ctime(),
         "img": image_urls[1],
     }
+
+    # return the rendered page
     return render(request, template, context)
 
 def show_all(request):
     '''Response to the URL 'show_all', delegate task to a template'''
+    # delegate to html template
     template = "quotes/show_all.html"
+
+    # feed appropriate context for page rendering
     context = {
         "quotes": list(zip(quotes, image_urls)),
         "time": time.ctime(),
     }
+
+    # return the rendered page
     return render(request, template, context)

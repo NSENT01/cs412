@@ -1,10 +1,16 @@
 {% extends 'quotes/base.html' %}
 
 {% block content %}
+<!--
+    File: about.html
+    Author: Senthilvel Nithin (nsent01@bu.edu), 5/18/2026
+    Description: All quote display page
+-->
     <div>
         <main class="main">
             <section class="mainBody">
                 <h2 class="title">Kyrie Irving Quote of the Day</h2>
+                <!--Loop over each tuple in the quotes list and render the image and quote-->
                 {% for quote, img in quotes %}
                     <div class="quoteLine">
                             <img src={{img}} class="quoteImage">
