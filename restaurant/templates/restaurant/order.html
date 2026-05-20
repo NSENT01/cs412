@@ -1,0 +1,88 @@
+<!--
+    File: restaurant/order.html
+    Author: Senthilvel Nithin (nsent01@bu.edu), 5/20/2026
+    Description: Ordering form with POST request
+-->
+{% extends 'restaurant/base.html' %}
+
+{% block content %}
+<div class="mainWrapper">
+    <div class="mainOrder">
+        <h1>Online Order</h1>
+        <form action="{% url 'confirmation' %}" method="POST">
+            {% csrf_token %}
+            <div class="input">
+                <label for="name">Name: </label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            
+            <div class="input">
+                <label for="phone">Phone: </label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+
+            <div class="input">
+                <label for="email">Email: </label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="input">
+                <label for="flavor">Flavor: </label>
+                <select id="flavor" name="flavor" required>
+                    <option value="Vanilla">Vanilla</option>
+                    <option value="Chocolate">Chocolate</option>
+                    <option value="Vanilla/Chocolate Swirl">Vanilla/Chocolate Swirl</option>
+                    <option value="Strawberry">Strawberry</option>
+                    <option value="Mango">Mango</option>
+                    <option value="Strawberry/Mango Swirl">Strawberry/Mango Swirl</option>
+                </select>
+            </div>
+
+            <!--Toppings selection-->
+            <div class="input">
+                <label for="toppings">Toppings:</label>
+                <div class="selection">
+                    <input type="checkbox" id="oreos" name="oreos" value="oreos">
+                    <label for="oreos">Oreos</label>
+                </div>
+
+                <div class="selection">
+                    <input type="checkbox" id="m&ms" name="m&ms" value="m&ms">
+                    <label for="m&ms">M&Ms</label>
+                </div>
+
+                <div class="selection">
+                    <input type="checkbox" id="toffee" name="toffee" value="toffee">
+                    <label for="toffee">Toffee</label>
+                </div>
+
+                <div class="selection">
+                    <input type="checkbox" id="gummies" name="gummies" value="gummies">
+                    <label for="gummies">Gummies</label>
+                </div>
+
+                <div class="selection">
+                    <input type="checkbox" id="fruit" name="fruit" value="fruit">
+                    <label for="fruit">Fruit</label>
+                </div>
+            </div>
+
+            <div class="input">
+                <label for="special">Today's Special:</label>
+                <div class="selection">
+                    <input type="checkbox" id="special" name="special" value="{{special}}">
+                    <label for="special">{{special}}</label>
+                </div>
+            </div>
+            
+            <div>
+                <label for="special_request">Special Requests: </label>
+                <input type="text" id="special_request" name="special_request">
+            </div>
+
+            <input type="submit" class="submit">
+            
+        </form>
+    </div>
+</div>
+{% endblock %}

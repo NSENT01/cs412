@@ -1,0 +1,38 @@
+<!--
+    File: restaurant/base.html
+    Author: Senthilvel Nithin (nsent01@bu.edu), 5/20/2026
+    Description: Base template
+-->
+{% load static %}
+
+<html>
+    <head>
+        <title>Al's Frozen Yogurt</title>
+        <link rel="stylesheet" href="{% static 'styles-restaurant.css' %}">
+    </head>
+    <body>
+        <!--Nav bar-->
+        <nav class="navbar">
+            <img src="https://static.vecteezy.com/system/resources/previews/019/494/511/non_2x/froyo-frozen-yogurt-icon-element-illustration-flat-style-vector.jpg"
+                 alt="logo"
+                 class="logo">
+            
+            <h1 class="title">Al's Frozen Yogurt</h1>
+
+            <ul class="menu">
+                <li class="menuItem"><a href="{% url 'main' %}">Main</a></li>
+                <li class="menuItem"><a href="{% url 'order' %}">Order</a></li>
+            </ul>
+        </nav>
+
+        <!-- Put page specific content here-->
+        {% block content %}
+        {% endblock %}
+
+        <!--Footer-->
+        <footer class="footer">
+            Page created by nsent01@bu.edu <br>
+            Generated at: {{time}}
+        </footer>
+    </body>
+</html>

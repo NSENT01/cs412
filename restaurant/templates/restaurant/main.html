@@ -1,0 +1,35 @@
+<!--
+    File: restaurant/main.html
+    Author: Senthilvel Nithin (nsent01@bu.edu), 5/20/2026
+    Description: Restaurant landing page
+-->
+{% extends 'restaurant/base.html' %}
+
+{% block content %}
+<div class="main">
+    <div class="info">
+        <h2>Al's Froyo World</h2>
+        <p>1234 Wonderful Boulevard</p>
+        <button onClick="window.location.href='{% url 'order' %}'">ORDER NOW</button>
+        <table>
+            <tr>
+                <th>Thu</th>
+                <td>9:00AM - 8:00PM</td>
+            </tr>
+            <tr>
+                <th>Fri</th>
+                <td>9:00AM - 8:00PM</td>
+            </tr>
+            <tr>
+                <th>Sat</th>
+                <td>9:00AM - 8:00PM</td>
+            </tr>
+            <tr>
+                <th>Sun</th>
+                <td>9:00AM - 8:00PM</td>
+            </tr>
+        </table>
+    </div>
+    <img src="https://quickandsweetrecipes.com/wp-content/uploads/2025/08/3-High-Protein-Frozen-Yogurt.png" class="mainImg">
+</div>
+{% endblock %}
