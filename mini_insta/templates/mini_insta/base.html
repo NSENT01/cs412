@@ -1,0 +1,20 @@
+{% load static %}
+
+<html>
+    <head>
+        <title>Instagram</title>
+        <link rel="stylesheet" href="{% static 'styles-mini-insta.css' %}">
+    </head>
+    <body>
+        <h2 class="title">Instagram</h2>
+        {% block content %}
+        {% endblock %}
+        <nav class="navbar">
+            <ul class="menu">
+                <li class="menuItem"><a href="{% url 'home' %}">
+                    <img src="https://static.vecteezy.com/system/resources/previews/004/220/756/original/home-silhouette-button-free-vector.jpg" width="30">
+                </a></li>
+            </ul>
+        </nav>
+    </body>
+</html>
