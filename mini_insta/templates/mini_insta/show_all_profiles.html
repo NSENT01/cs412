@@ -2,13 +2,17 @@
 
 {% block content %}
     <div class="main">
+        <div class="profileBar">
         {% for profile in profiles %}
             <div>
-                <img src="{{profile.profile_image_url}}" width="400">
-                <h1>{{profile.display_name}}</h2>
-                <h3>{{profile.username}}</h1>
-                <p>{{profile.bio_text}}</p>
+                <a href="{% url 'profile' profile.pk %}">
+                <img src="{{profile.profile_image_url}}" class="profileImage">
+                </a>
             </div>
         {% endfor %}
+        </div>
+        <div class="posts">
+            
+        </div>
     </div>
 {% endblock %}

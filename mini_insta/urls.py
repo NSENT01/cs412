@@ -8,5 +8,6 @@ from . import views
 
 # url patterns for mini insta
 urlpatterns = [
-    path(r'', views.ProfileListView.as_view(), name="home"),
+    path('', views.ProfileListView.as_view(), name="home"),
+    path('profile/<int:pk>', views.ProfileDetailView.as_view(), name="profile"),
 ]
