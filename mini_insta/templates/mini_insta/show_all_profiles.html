@@ -1,3 +1,9 @@
+<!--
+    File: mini_insta/show_all_profiles.html
+    Author: Senthilvel Nithin (nsent01@bu.edu), 5/22/2026
+    Description: Home page with all profiles
+-->
+
 {% extends 'mini_insta/base.html' %}
 
 {% block content %}
@@ -11,8 +17,20 @@
             </div>
         {% endfor %}
         </div>
-        <div class="posts">
-            
+        <div class="postsGridMain">
+            {% for profile in profiles %}
+                {% for post in profile.get_all_posts %}
+                    {% for photo in post.get_all_photos %}
+                        {% if forloop.first %}
+                            <a href="{% url 'show_post' post.pk %}" class="postTileMain">
+                                <img src="{{ photo.get_image_url }}" alt="Post photo">
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                    <p>{{post.caption}}</p>
+                    <p><small>{{post.timestamp}}</small></p>
+                {% endfor %}
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

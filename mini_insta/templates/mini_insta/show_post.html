@@ -1,0 +1,23 @@
+<!--
+    File: mini_insta/show_post.html
+    Author: Senthilvel Nithin (nsent01@bu.edu), 5/22/2026
+    Description: Show a single post
+-->
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<div>
+    <div class="postsGrid">
+            {% for photo in post.get_all_photos %}
+                <a href="{% url 'show_post' post.pk %}" class="postTile">
+                    <img src="{{ photo.get_image_url }}" alt="Post photo">
+                </a>
+            {% endfor %}
+        </div>
+    <div>
+        <p>{{post.caption}}</p>
+        <p><small>{{post.timestamp}}</small></p>
+    </div>
+</div>
+{% endblock %}

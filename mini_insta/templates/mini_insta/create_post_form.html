@@ -1,0 +1,20 @@
+<!--
+    File: mini_insta/create_post_form.html
+    Author: Senthilvel Nithin (nsent01@bu.edu), 5/22/2026
+    Description: Form for uploading a post
+-->
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<h2>Create a new post</h2>
+<form method="POST" action="{% url 'create_post_form' profile.pk%}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table>
+        {{form.as_table}}
+    </table>
+    <label for="image_url">Select Images: </label>
+    <input type="file" name="image_files" multiple>
+    <input type="submit" name="Post" value="post">
+    <a href="{% url 'profile' profile.pk %}" class="button secondary">Cancel<a>
+</form>
+{% endblock %}

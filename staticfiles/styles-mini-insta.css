@@ -1,86 +1,155 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     min-height: 100vh;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     margin: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    padding-top: 20px;
+    padding: 72px 16px 88px;
+    background: #fafafa;
+    color: #262626;
 }
-.main {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    width: clamp(200px, 30%, 800px);
-    margin: 0 auto;
-}
-.navbar {
+.topbar {
     position: fixed;
-    display: flex;
-    background: #f2c7ff;
-    border-radius: 30px;
-    padding: 10px 20px;
-    margin: 0 auto;
-    width: clamp(200px, 30%, 800px);
-    justify-content: space-between;
-    align-items: center;
-    bottom: 10;
+    top: 0;
     left: 0;
     right: 0;
-    z-index: 9999;
+    height: 56px;
+    background: #fff;
+    border-bottom: 1px solid #dbdbdb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10
+}
+.title {
+    display: flex;
+    justify-content: center;
+    color:#262626;
+    text-decoration: none;
+    font-weight: 700;
+}
+.page {
+    width: min(100%, 935px);
+    margin: 0 auto;
+}
+.main {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.navbar {
+    position: fixed;
+    transform: translateX(-50%);
+    width: min(420px, calc(100% - 32px));
+    background: #fff;
+    border: 1px solid #dbdbdb;
+    border-radius: 999px;
+    padding: 10px 20px;
+    bottom: 12px;
+    left: 50%;
+    z-index: 20;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 .menu {
     display: flex;
+    justify-content: space-around;
+    align-items: center;
     list-style-type: none;
     margin: 0;
     padding: 0;
 }
 .menuItem {
-    margin: 0 15px;
-}
-.title {
-    display: flex;
-    justify-content: center;
+    text-decoration: none;
+    font-size: 26px;
+    color: #262626;
+    line-height: 1;
 }
 .profileImage {
     border-radius: 100%;
+    object-fit: cover;
     width: 60px;
     height: 60px;
     margin: 5px;
+    border: 1px solid #dbdbdb;
 }
 .profileBar {
     display: flex;
     flex-direction: row;
-    position: relative;
+    justify-content: center;
+}
+.profileHeaderPosts {
+    width: 100%
 }
 .accountHeader {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    padding: 28px 0;
+    align-items: center;
+    gap: 32px;
+    border-bottom: 1px solid #dbdbdb;
 }
 .accountAnalytics {
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
-    gap: 5px;
+    align-items: center;
+    gap: 32px;
     
 }
 .profile {
-    display: flex;
-    flex-direction: column;
-    justify-content:flex-start;
-    align-items:flex-start;
-    margin-right: auto;
+    display: contents;
 }
 .profileText {
     margin-top: 5;
     margin-bottom: 5;
 }
 .counts {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
+    text-align: center
+}
+.counts h2 {
+    margin: 0;
+    font-size: 18px;
+}
+.counts p {
+    margin: 4px 0 0;
+    color: #737373;
+}
+.postsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    margin-top: 4px;
+}
+.postTile {
+    aspect-ratio: 1;
+    display: block;
+    background: #efefef;
+    overflow: hidden;
+}
+.postTile img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+.postsGridMain {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: min(100%, 400px);
+    margin: 0 auto;
+    gap: 16px;
+}
+.postTileMain {
+    aspect-ratio: 1;
+    display: block;
+    background: #efefef;
+    border: 1px solid #dbdbdb;
+    overflow: hidden;
+}
+.postTileMain img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
 }

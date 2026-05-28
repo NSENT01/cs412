@@ -5,10 +5,11 @@
 from django import forms
 from .models import Post
 
-class CreatePost(forms.ModelForm):
+class CreatePostForm(forms.ModelForm):
     '''Writes a new Post to our database'''
 
     class Meta:
         '''Associate this form with a model from out database'''
         model = Post
-        fields = ['']
+        fields = ['caption']
+

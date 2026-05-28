@@ -1,3 +1,9 @@
+<!--
+    File: mini_insta/base.html
+    Author: Senthilvel Nithin (nsent01@bu.edu), 5/22/2026
+    Description: Base template
+-->
+
 {% load static %}
 
 <html>
@@ -6,14 +12,21 @@
         <link rel="stylesheet" href="{% static 'styles-mini-insta.css' %}">
     </head>
     <body>
-        <h2 class="title">Instagram</h2>
-        {% block content %}
-        {% endblock %}
+        <header class="topbar"><h2 class="title">Instagram</h2></header>
+        <main class="page">
+            {% block content %}
+            {% endblock %}
+        </main>
         <nav class="navbar">
             <ul class="menu">
                 <li class="menuItem"><a href="{% url 'home' %}">
                     <img src="https://www.freeiconspng.com/uploads/home-button-png-icon-30.png" width="25" height="25">
                 </a></li>
+                {% if profile %}
+                <li class="menuItem"><a href="{% url 'create_post_form' profile.pk%}">
+                    <img src="https://www.freepnglogos.com/uploads/plus-icon/file-plus-font-awesome-svg-wikimedia-commons-10.png" width="25" height="25">
+                </a></li>
+                {% endif %}
             </ul>
         </nav>
     </body>
