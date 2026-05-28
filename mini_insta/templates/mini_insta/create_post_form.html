@@ -6,18 +6,32 @@
 {% extends 'mini_insta/base.html' %}
 
 {% block content %}
-<h2>Create a new post</h2>
-<!--Form for uploading a post-->
-<form method="POST" action="{% url 'create_post_form' profile.pk%}" enctype="multipart/form-data">
-    {% csrf_token %}
-    <!--Django form object-->
-    <table>
-        {{form.as_table}}
-    </table>
-    <!--Separate field for selecting image files-->
-    <label for="image_url">Select Images: </label>
-    <input type="file" name="image_files" multiple>
-    <input type="submit" name="Post" value="post">
-    <a href="{% url 'profile' profile.pk %}" class="button secondary">Cancel<a>
-</form>
+<div class="formWrapper">
+    <h2>Create a new post</h2>
+    <!--Form for uploading a post-->
+    <form class="createForm" method="POST" action="{% url 'create_post_form' profile.pk%}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <!--Django form object-->
+        <table>
+            {{form.as_table}}
+            <!--Separate field for selecting image files-->
+            
+            <tr>
+                <th>
+                    <label for="image_url">Select Images: </label>
+                </th>
+                <td>
+                    <input type="file" name="image_files" multiple>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="submit" name="Post" value="Post">
+                    <a href="{% url 'profile' profile.pk %}" class="button secondary">Cancel</a>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
 {% endblock %}
