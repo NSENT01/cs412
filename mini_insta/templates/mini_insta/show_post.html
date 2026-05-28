@@ -9,6 +9,7 @@
 {% block content %}
 <div>
     <div class="postsGrid">
+        <!--Get all photos to display in the post view-->
             {% for photo in post.get_all_photos %}
                 <a href="{% url 'show_post' post.pk %}" class="postTile">
                     <img src="{{ photo.get_image_url }}" alt="Post photo">
@@ -16,6 +17,7 @@
             {% endfor %}
         </div>
     <div>
+        <!--Post caption and timestamp-->
         <p>{{post.caption}}</p>
         <p><small>{{post.timestamp}}</small></p>
     </div>

@@ -8,7 +8,9 @@
 
 {% block content %}
 <div class="main">
+    <!--Account header and posts-->
     <div class="profileHeaderPosts">
+        <!--Account header with profile pictures and analytics-->
         <div class="accountHeader">
             <div class="profile">
                 <img src="{{profile.profile_image_url}}" width="100" class="profileImage">
@@ -16,6 +18,7 @@
                 <p class="profileText">{{profile.username}}</p>
                 <p class="profileText"><small>{{profile.bio_text}}</small></p>
             </div>
+            <!--Account post, followers, and following analytics-->
             <div class="accountAnalytics">
                 <div class="counts">
                     <h2 class="profileText">{{profile.get_all_posts|length}}</h2>
@@ -31,6 +34,7 @@
                 </div>
             </div>
         </div>
+        <!--Account posts-->
         <div class="postsGrid">
             {% for post in profile.get_all_posts %}
                 {% for photo in post.get_all_photos %}

@@ -8,6 +8,7 @@
 
 {% block content %}
     <div class="main">
+        <!--Profile pictures with links to their profile-->
         <div class="profileBar">
         {% for profile in profiles %}
             <div>
@@ -17,6 +18,7 @@
             </div>
         {% endfor %}
         </div>
+        <!--Display all users posts in a scroll view-->
         <div class="postsGridMain">
             {% for profile in profiles %}
                 {% for post in profile.get_all_posts %}
@@ -27,6 +29,7 @@
                             </a>
                         {% endif %}
                     {% endfor %}
+                    <!--Post caption and timestamp-->
                     <p>{{post.caption}}</p>
                     <p><small>{{post.timestamp}}</small></p>
                 {% endfor %}

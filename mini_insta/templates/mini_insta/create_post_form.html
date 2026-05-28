@@ -7,11 +7,14 @@
 
 {% block content %}
 <h2>Create a new post</h2>
+<!--Form for uploading a post-->
 <form method="POST" action="{% url 'create_post_form' profile.pk%}" enctype="multipart/form-data">
     {% csrf_token %}
+    <!--Django form object-->
     <table>
         {{form.as_table}}
     </table>
+    <!--Separate field for selecting image files-->
     <label for="image_url">Select Images: </label>
     <input type="file" name="image_files" multiple>
     <input type="submit" name="Post" value="post">

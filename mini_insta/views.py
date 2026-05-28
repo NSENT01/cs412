@@ -34,6 +34,8 @@ class CreatePostView(CreateView):
     def get_context_data(self):
         '''Give context data for url routing'''
         context = super().get_context_data()
+
+        # get the Profile object with the primary key in the route and append it to the context
         profile = get_object_or_404(Profile, pk=self.kwargs['pk'])
         context['profile'] = profile
         return context
@@ -57,6 +59,7 @@ class CreatePostView(CreateView):
         #         post = self.object
         #     )
 
+        # iterate through all photos and make a new instance of the object with the appropriate post field
         files = self.request.FILES.getlist('image_files')
         for file in files:
             Photo.objects.create(
