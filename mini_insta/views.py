@@ -68,6 +68,10 @@ class CreatePostView(CreateView):
             )
 
         return response
+    
+    def get_success_url(self):
+        '''Get url for redirection after succesful creation of post'''
+        return reverse('profile', kwargs={'pk': self.kwargs['pk']})
 
 
 class PostDetailView(DetailView):
