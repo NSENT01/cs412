@@ -3,9 +3,9 @@
 # Description: API for rendering HTML form and handling input data
 
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import *
-from .forms import CreatePostForm
+from .forms import CreatePostForm, UpdateProfileForm
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
@@ -81,5 +81,10 @@ class PostDetailView(DetailView):
     template_name = 'mini_insta/show_post.html'
     context_object_name = 'post'
 
+class UpdateProfileView(UpdateView):
+    '''Create a subclass of UpdateView to update a posts data in our database'''
 
+    model = Profile
+    form_class = UpdateProfileForm
+    template_name = 'mini_insta/update_profile_form.html'
 

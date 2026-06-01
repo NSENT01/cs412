@@ -13,7 +13,12 @@
         <!--Account header with profile pictures and analytics-->
         <div class="accountHeader">
             <div class="profile">
-                <img src="{{profile.profile_image_url}}" width="100" class="profileImage">
+                <div>
+                    <img src="{{profile.profile_image_url}}" width="100" class="profileImage">
+                    <div class="edits">
+                        <a href="{% url 'update_profile' profile.pk %}" class="button secondary">Update</a>
+                    </div>
+                </div>
                 <h3 class="profileText">{{profile.display_name}}</h3>
                 <p class="profileText">{{profile.username}}</p>
                 <p class="profileText"><small>{{profile.bio_text}}</small></p>

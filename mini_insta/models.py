@@ -23,6 +23,10 @@ class Profile(models.Model):
         '''Get all the posts for a profile and return as a QuerySet'''
         posts = Post.objects.filter(profile=self)
         return posts
+    
+    def get_absolute_url(self):
+        '''Redirect user to profile after successful update'''
+        return reverse('profile', kwargs={'pk': self.pk})
 
     
 class Post(models.Model):

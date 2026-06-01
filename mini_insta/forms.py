@@ -3,7 +3,7 @@
 # Description: Defining how form data will be written to our databse using our specified model classes
 
 from django import forms
-from .models import Post
+from .models import Post, Profile
 
 class CreatePostForm(forms.ModelForm):
     '''Writes a new Post to our database'''
@@ -13,3 +13,10 @@ class CreatePostForm(forms.ModelForm):
         model = Post
         fields = ['caption']
 
+class UpdateProfileForm(forms.ModelForm):
+    '''Updates a Post record to our database'''
+
+    class Meta:
+        '''Associate this form with the appropriate model'''
+        model = Profile
+        fields = ['display_name', 'bio_text', 'profile_image_url']

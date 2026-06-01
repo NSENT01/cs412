@@ -198,3 +198,24 @@ body {
     color: #262626;
     text-align: center;
 }
+.edits .button {
+    display: inline-block;
+    width: 60px;
+    height: 20px;
+    margin-top: 8px;
+    padding: 0;
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 9px;
+}
+.edits .button.secondary {
+    background: #efefef;
+    color: #262626;
+    text-align: center;
+    justify-content: center;
+}
+.profile .edits {
+    display: flex
+}
