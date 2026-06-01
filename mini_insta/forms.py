@@ -14,9 +14,17 @@ class CreatePostForm(forms.ModelForm):
         fields = ['caption']
 
 class UpdateProfileForm(forms.ModelForm):
-    '''Updates a Post record to our database'''
+    '''Updates a Profile record to our database'''
 
     class Meta:
         '''Associate this form with the appropriate model'''
         model = Profile
         fields = ['display_name', 'bio_text', 'profile_image_url']
+
+class UpdatePostForm(forms.ModelForm):
+    '''Updates a Post record in our database'''
+
+    class Meta:
+        '''Associate this form with the appropriate model'''
+        model = Post
+        fields = ['caption']

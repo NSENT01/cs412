@@ -6,5 +6,29 @@
 {% extends 'mini_insta/base.html' %}
 
 {% block content %}
-    <p>Are you sure you would like to delete this post</p>
+    <div>
+    <div class="postsGrid">
+        <!--Get all photos to display in the post view-->
+            {% for photo in post.get_all_photos %}
+                <a href="{% url 'show_post' post.pk %}" class="postTile">
+                    <img src="{{ photo.get_image_url }}" alt="Post photo">
+                </a>
+            {% endfor %}
+        </div>
+    <div>
+        <!--Post caption and timestamp-->
+        <p>{{post.caption}}</p>
+        <p><small>{{post.timestamp}}</small></p>
+        <div class="confirmation">
+            <form action="{% url 'delete_post' post.pk %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="submit" name="Confirm" value="Confirm">
+            </form>
+            <form action="{% url 'profile' post.profile.pk %}" method="GET" enctype="multipart/form-data" class="secondary">
+                {% csrf_token %}
+                <input type="submit" name="Cancel" value="Cancel">
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

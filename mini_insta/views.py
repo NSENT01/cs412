@@ -5,7 +5,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import *
-from .forms import CreatePostForm, UpdateProfileForm
+from .forms import CreatePostForm, UpdateProfileForm, UpdatePostForm
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
@@ -88,3 +88,42 @@ class UpdateProfileView(UpdateView):
     form_class = UpdateProfileForm
     template_name = 'mini_insta/update_profile_form.html'
 
+class DeletePostView(DeleteView):
+    '''Create a subclass of DeleteView to delete a post from our database'''
+
+    model = Post
+    template_name = 'mini_insta/delete_post_form.html'
+
+    def get_context_data(self, **kwargs):
+        '''Give context data for url routing'''
+        context = super().get_context_data(**kwargs)
+
+        context['post'] = get_object_or_404(Post, pk=self.kwargs['pk'])
+
+        context['profile'] = context['post'].profile
+        return context
+    
+    def get_success_url(self):
+        '''Define the URL to which succesful deletion should redirect the user'''
+
+        profile_pk = get_object_or_404(Post, pk=self.kwargs['pk']).profile.pk
+
+        return reverse('profile', kwargs={'pk': profile_pk})
+    
+class UpdatePostView(UpdateView):
+    '''Create a subclass of UpdateView to update a post in our database'''
+
+    model = Post
+    form_class = UpdatePostForm
+    template_name = 'mini_insta/update_post_form.html'
+
+    def get_context_data(self, **kwargs):
+        context =  super().get_context_data(**kwargs)
+
+        context['post'] = get_object_or_404(Post, pk=self.kwargs['pk'])
+
+        context['profile'] = context['post'].profile
+        return context
+    
+    def get_success_url(self):
+        return reverse('show_post', kwargs={'pk': self.kwargs['pk']})

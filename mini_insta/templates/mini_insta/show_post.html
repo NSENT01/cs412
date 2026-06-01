@@ -20,6 +20,10 @@
         <!--Post caption and timestamp-->
         <p>{{post.caption}}</p>
         <p><small>{{post.timestamp}}</small></p>
+        <div class="confirmation">
+            <a href="{% url 'delete_post' post.pk %}" class="button secondary">Delete</a>
+            <a href="{% url 'update_post' post.pk %}" class="button secondary">Update</a>
+        </div>
     </div>
 </div>
 {% endblock %}

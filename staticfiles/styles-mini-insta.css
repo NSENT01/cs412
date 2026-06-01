@@ -219,3 +219,36 @@ body {
 .profile .edits {
     display: flex
 }
+
+.confirmation input[type="submit"],
+.confirmation .button {
+    display: inline-block;
+    width: 100px;
+    height: 40px;
+    margin-top: 16px;
+    padding: 9px 16px;
+    border-radius: 8px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+}
+.confirmation .button.secondary {
+    background: #efefef;
+    color: #262626;
+    text-align: center;
+    justify-content: center;
+}
+.confirmation input[type="submit"] {
+    border: 0;
+    background: #0095f6;
+    color: white;
+}
+.confirmation .secondary input[type="submit"] {
+    border: 0;
+    background: #efefef;
+    color: #262626;
+    margin-left: 8px
+}
+.confirmation {
+    display: flex;
+}

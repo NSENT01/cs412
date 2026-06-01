@@ -1,15 +1,15 @@
 <!--
-    File: mini_insta/update_profile_form.html
+    File: mini_insta/update_post_form.html
     Author: Senthilvel Nithin (nsent01@bu.edu), 5/28/2026
-    Description: Form for updating a profile
+    Description: Form for updating a post
 -->
 {% extends 'mini_insta/base.html' %}
 
 {% block content %}
 <div class="formWrapper">
     <h2>Update your post</h2>
-    <!--Form for updating a profile-->
-    <form class="createForm" method="POST" action="{% url 'update_profile' profile.pk%}" enctype="multipart/form-data">
+    <!--Form for updating a post-->
+    <form class="createForm" method="POST" action="{% url 'update_post' post.pk%}" enctype="multipart/form-data">
         {% csrf_token %}
         <!--Django form object-->
         <table>
@@ -20,7 +20,7 @@
                 <td></td>
                 <td>
                     <input type="submit" name="Update" value="Update">
-                    <a href="{% url 'profile' profile.pk %}" class="button secondary">Cancel</a>
+                    <a href="{% url 'show_post' post.pk %}" class="button secondary">Cancel</a>
                 </td>
             </tr>
         </table>
