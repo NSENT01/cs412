@@ -30,12 +30,16 @@
                     <p class="profileText">Posts</p>
                 </div>
                 <div class="counts">
-                    <h2 class="profileText">TBD</h2>
-                    <p class="profileText">Followers</p>
+                    <a href="{% url 'show_followers' profile.pk %}">
+                        <h2 class="profileText">{{profile.get_num_followers}}</h2>
+                        <p class="profileText">Followers</p>
+                    </a>
                 </div>
                 <div class="counts">
-                    <h2 class="profileText">TBD</h2>
-                    <p class="profileText">Following</p>
+                    <a href="{% url 'show_following' profile.pk %}">
+                        <h2 class="profileText">{{profile.get_num_following}}</h2>
+                        <p class="profileText">Following</p>
+                    </a>
                 </div>
             </div>
         </div>

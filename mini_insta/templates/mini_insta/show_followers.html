@@ -1,0 +1,43 @@
+<!--
+    File: mini_insta/show_followers.html
+    Author: Senthilvel Nithin (nsent01@bu.edu), 6/01/2026
+    Description: Show a profiles follower list
+-->
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<div class="main">
+    <!--Account header and follower list-->
+    <div class="profileHeaderPosts">
+        <!--Account header with profile pictures-->
+        <div class="accountHeader">
+            <div class="profile">
+                <div>
+                    <img src="{{profile.profile_image_url}}" width="100" class="profileImage">
+                </div>
+                <h3 class="profileText">{{profile.username}}</h3>
+            </div>
+        </div>
+        <!--Account followers-->
+        <div class="followList">
+            {% for follower in profile.get_followers %}
+                <div class="profileList">
+                    <a href="{% url 'profile' follower.pk %}">
+                        <img src="{{follower.profile_image_url}}" width="100" class="profileImage">
+                    </a>
+                    <a href="{% url 'profile' follower.pk %}" class="link">
+                        <div class="profileText">
+                            <h2>{{follower.display_name}}</h2>
+                            <p>{{follower.username}}</p>
+                        </div>
+                    </a>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -127,3 +127,69 @@ class UpdatePostView(UpdateView):
     
     def get_success_url(self):
         return reverse('show_post', kwargs={'pk': self.kwargs['pk']})
+    
+class ShowFollowingDetailView(DetailView):
+    '''Create a subclass of DetailView to show a users entire following'''
+    model = Profile
+    template_name = 'mini_insta/show_following.html'
+    context_object_name = 'profile'
+
+class ShowFollowersDetailView(DetailView):
+    '''Create a subclass of DetailView to show a users followers'''
+
+    model = Profile
+    template_name = 'mini_insta/show_followers.html'
+    context_object_name = 'profile'
+
+class ShowFeedView(DetailView):
+    '''Create a subclass of DetailView to show a users feed'''
+
+    model = Profile
+    template_name = 'mini_insta/show_feed.html'
+    context_object_name = 'profile'
+
+class SearchView(ListView):
+    '''Create a subclass of ListView to show search results'''
+
+
+    template_name = 'mini_insta/search_results.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        '''Override dispatch method to return based on incoming form data'''
+        profile = Profile.objects.get(pk=self.kwargs['pk'])
+        context = {
+            'profile': profile,
+        }
+        if 'name' in self.request.GET:
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            template = 'mini_insta/search.html'
+            return render(request, template, context)
+        
+    def get_queryset(self):
+        '''Return the queryset of Posts for the ListView since a model was not specified'''
+        if 'name' not in self.request.GET:
+            return Post.objects.none()
+        
+        profile = Profile.objects.get(pk=self.kwargs['pk'])
+        name = self.request.GET['name']
+        posts = Post.objects.filter(profile__username__icontains=name) | Post.objects.filter(profile__display_name__icontains=name) | Post.objects.filter(caption__contains=name)
+        posts = posts.exclude(profile=profile)
+
+        return posts
+    
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+        profile = Profile.objects.get(pk=self.kwargs['pk'])
+        context['profile'] = profile
+        context['posts'] = self.get_queryset()
+
+        if 'name' in self.request.GET:
+            name = self.request.GET['name']
+            context['profiles'] = Profile.objects.filter(username__icontains=name) | Profile.objects.filter(display_name__icontains=name)
+            context['profiles'] = context['profiles'].exclude(username=profile.username).exclude(display_name=profile.display_name)
+        else:
+            context['profiles'] = Profile.objects.none()
+
+        return context

@@ -1,0 +1,16 @@
+<!--
+    File: mini_insta/search.html
+    Author: Senthilvel Nithin (nsent01@bu.edu), 6/03/2026
+    Description: Show a search bar
+-->
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<div class="searchWrapper">
+    <form method="GET" enctype="multipart/form-data" action="{% url 'search' profile.pk %}" class="searchForm">
+        <input type="search" name="name" placeholder="Search profiles and posts">
+        <input type="submit" value="Search">
+    </form>
+</div>
+{% endblock %}

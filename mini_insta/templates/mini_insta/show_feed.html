@@ -1,0 +1,57 @@
+<!--
+    File: mini_insta/show_feed.html
+    Author: Senthilvel Nithin (nsent01@bu.edu), 6/01/2026
+    Description: Show a profiles feed 
+-->
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<div class="centerWrapper">
+    <div class="feedContainer">
+        {% for post in profile.get_post_feed %}
+            <div>
+                <div class="postsGrid">
+                    <!--Get all photos to display in the post view-->
+                        {% for photo in post.get_all_photos %}
+                        {% if forloop.first %}
+                        <div>
+                            <div class="profileList">
+                                <a href="{% url 'profile' post.profile.pk %}" >
+                                    <img src="{{ post.profile.profile_image_url }}" alt="Profile photo" class="profileImageFeed">
+                                </a>
+                                <h4>{{post.profile.username}}</h4>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                            <a href="{% url 'show_post' post.pk %}" class="postTile">
+                                <img src="{{ photo.get_image_url }}" alt="Post photo">
+                            </a>
+                            {% if post.get_likes|length > 1 %}
+                                <p>Liked by <b>{{post.get_likes.0.profile}}</b> and {{post.get_num_likes_minus_1}} others</p>
+                            {% elif post.get_likes|length == 0 %}
+                                <p>No likes</p>
+                            {% else %}
+                                <p>Liked by <b>{{post.get_likes.0.profile}}</b></p>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                <div>
+                    <!--Post caption and timestamp-->
+                    <p>{{post.caption}}</p>
+                    <p><small>{{post.timestamp}}</small></p>
+                    {% for comment in post.get_all_comments %}
+                    <div>
+                        <p>{{comment.profile}}</h3>
+                        <p><small>{{comment.text}}</small></p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

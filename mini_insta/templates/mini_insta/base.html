@@ -22,12 +22,22 @@
         <!--Navigation bar with home button, and create post button in each profilr-->
         <nav class="navbar">
             <ul class="menu">
-                <li class="menuItem"><a href="{% url 'home' %}">
+                {% if profile %}
+                <li class="menuItem"><a href="{% url 'show_feed' profile.pk %}">
                     <img src="https://www.freeiconspng.com/uploads/home-button-png-icon-30.png" width="25" height="25">
                 </a></li>
-                {% if profile %}
                 <li class="menuItem"><a href="{% url 'create_post_form' profile.pk%}">
                     <img src="https://www.freepnglogos.com/uploads/plus-icon/file-plus-font-awesome-svg-wikimedia-commons-10.png" width="25" height="25">
+                </a></li>
+                <li class="menuItem"><a href="{% url 'profile' profile.pk%}">
+                    <img src="{{profile.profile_image_url}}" width="25" height="25" class="profileImageNav">
+                </a></li>
+                <li class="menuItem"><a href="{% url 'search' profile.pk%}">
+                    <img src="https://www.freeiconspng.com/uploads/search-icon-png-21.png" width="25" height="25">
+                </a></li>
+                {% else %}
+                <li class="menuItem"><a href="{% url 'home' %}">
+                    <img src="https://www.freeiconspng.com/uploads/home-button-png-icon-30.png" width="25" height="25">
                 </a></li>
                 {% endif %}
             </ul>
