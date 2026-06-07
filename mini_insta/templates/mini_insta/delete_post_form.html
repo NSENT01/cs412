@@ -24,7 +24,7 @@
                 {% csrf_token %}
                 <input type="submit" name="Confirm" value="Confirm">
             </form>
-            <form action="{% url 'profile' post.profile.pk %}" method="GET" enctype="multipart/form-data" class="secondary">
+            <form action="{% url 'personal_profile' %}" method="GET" enctype="multipart/form-data" class="secondary">
                 {% csrf_token %}
                 <input type="submit" name="Cancel" value="Cancel">
             </form>

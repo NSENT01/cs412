@@ -13,7 +13,7 @@
     </head>
     <body>
         <!--Instagram title across all pages-->
-        <header class="topbar"><h2 class="title">Instagram</h2></header>
+        <header class="topbar"><h2 class="title">Instagram, user:{{request.user}}</h2></header>
         <!--Main content dynamically loaded based on route and template-->
         <main class="page">
             {% block content %}
@@ -22,22 +22,32 @@
         <!--Navigation bar with home button, and create post button in each profilr-->
         <nav class="navbar">
             <ul class="menu">
-                {% if profile %}
-                <li class="menuItem"><a href="{% url 'show_feed' profile.pk %}">
+                {% if request.user.is_authenticated %}
+                <li class="menuItem"><a href="{% url 'show_feed' %}">
                     <img src="https://www.freeiconspng.com/uploads/home-button-png-icon-30.png" width="25" height="25">
                 </a></li>
-                <li class="menuItem"><a href="{% url 'create_post_form' profile.pk%}">
+                <li class="menuItem"><a href="{% url 'create_post_form' %}">
                     <img src="https://www.freepnglogos.com/uploads/plus-icon/file-plus-font-awesome-svg-wikimedia-commons-10.png" width="25" height="25">
                 </a></li>
-                <li class="menuItem"><a href="{% url 'profile' profile.pk%}">
+                <li class="menuItem"><a href="{% url 'personal_profile' %}">
                     <img src="{{profile.profile_image_url}}" width="25" height="25" class="profileImageNav">
                 </a></li>
-                <li class="menuItem"><a href="{% url 'search' profile.pk%}">
+                <li class="menuItem"><a href="{% url 'search' %}">
                     <img src="https://www.freeiconspng.com/uploads/search-icon-png-21.png" width="25" height="25">
                 </a></li>
+                <li class="menuItem">
+                    <form method="POST" action="{% url 'logout' %}" enctype="multipart/form-data" class="logout">
+                        {% csrf_token %}
+                        <input type="image" src="https://w7.pngwing.com/pngs/853/997/png-transparent-undo-back-solid-icon.png" class="imageButton" alt="submit">
+                            
+                    </form>
+                </li>
                 {% else %}
                 <li class="menuItem"><a href="{% url 'home' %}">
                     <img src="https://www.freeiconspng.com/uploads/home-button-png-icon-30.png" width="25" height="25">
+                </a></li>
+                <li class="menuItem"><a href="{% url 'login' %}">
+                    <img src="https://www.freeiconspng.com/uploads/black-login-icon--0.png" width="25" height="25">
                 </a></li>
                 {% endif %}
             </ul>

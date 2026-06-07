@@ -9,7 +9,7 @@
 <div class="formWrapper">
     <h2>Create a new post</h2>
     <!--Form for uploading a post-->
-    <form class="createForm" method="POST" action="{% url 'create_post_form' profile.pk%}" enctype="multipart/form-data">
+    <form class="createForm" method="POST" action="{% url 'create_post_form' %}" enctype="multipart/form-data">
         {% csrf_token %}
         <!--Django form object-->
         <table>
@@ -28,7 +28,7 @@
                 <td></td>
                 <td>
                     <input type="submit" name="Post" value="Post">
-                    <a href="{% url 'profile' profile.pk %}" class="button secondary">Cancel</a>
+                    <a href="{% url 'personal_profile' %}" class="button secondary">Cancel</a>
                 </td>
             </tr>
         </table>

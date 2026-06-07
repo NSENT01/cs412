@@ -4,6 +4,7 @@
 
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Profile(models.Model):
@@ -14,6 +15,7 @@ class Profile(models.Model):
     profile_image_url = models.URLField(blank=True)
     bio_text = models.TextField(max_length=100, blank=True)
     join_date = models.DateTimeField(auto_now=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         '''Return the string representation of the Profile model'''
@@ -68,14 +70,6 @@ class Profile(models.Model):
         posts.order_by('timestamp')
         return posts
         
-
-
-
-
-        
-
-
-    
 class Post(models.Model):
     '''Encapsulate the idea of a social media post'''
 
@@ -115,6 +109,7 @@ class Post(models.Model):
     def get_num_likes_minus_1(self):
         '''Return the number of likes minus 1'''
         return len(self.get_likes()) - 1
+    
     
 class Photo(models.Model):
     '''Encapsulate the idea of a posts photo'''

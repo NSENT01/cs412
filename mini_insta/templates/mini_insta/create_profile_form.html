@@ -1,0 +1,19 @@
+<!--
+    File: mini_insta/create_profile_form.html
+    Author: Senthilvel Nithin (nsent01@bu.edu), 6/06/2026
+    Description: Form for creating a new profile
+-->
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<div class="formWrapper">
+    <h2>Create a new profile</h2>
+    <form action="{% url 'create_profile' %}" method="POST" enctype="multipart/form-data" class="createForm">
+        {% csrf_token %}
+        {{form}}
+        {{create_user}}
+        <input type="submit" value="Create">
+        <input type="hidden" name="next" value="{% url 'home' %}">
+    </form>
+</div>
+{% endblock %}

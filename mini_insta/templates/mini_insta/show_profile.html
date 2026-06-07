@@ -14,30 +14,45 @@
         <div class="accountHeader">
             <div class="profile">
                 <div>
-                    <img src="{{profile.profile_image_url}}" width="100" class="profileImage">
+                    <img src="{{other_profile.profile_image_url}}" width="100" class="profileImage">
+                    {% if request.user.is_authenticated and request.user == other_profile.user %}
                     <div class="edits">
-                        <a href="{% url 'update_profile' profile.pk %}" class="button secondary">Update</a>
+                        <a href="{% url 'update_profile' %}" class="button secondary">Update</a>
                     </div>
+                    {% endif %}
                 </div>
-                <h3 class="profileText">{{profile.display_name}}</h3>
-                <p class="profileText">{{profile.username}}</p>
-                <p class="profileText"><small>{{profile.bio_text}}</small></p>
+                <h3 class="profileText">{{other_profile.display_name}}</h3>
+                <p class="profileText">{{other_profile.username}}</p>
+                <p class="profileText"><small>{{other_profile.bio_text}}</small></p>
+                {% if request.user != other_profile.user %}
+                {% if other_profile.pk in follows %}
+                <form action="{% url 'delete_follow' other_profile.pk %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="submit" value="Unfollow" class="unfollow">
+                </form>
+                {% else %}
+                <form action="{% url 'follow' other_profile.pk %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="submit" value="Follow" class="follow">
+                </form>
+                {% endif %}
+                {% endif %}
             </div>
             <!--Account post, followers, and following analytics-->
             <div class="accountAnalytics">
                 <div class="counts">
-                    <h2 class="profileText">{{profile.get_all_posts|length}}</h2>
+                    <h2 class="profileText">{{other_profile.get_all_posts|length}}</h2>
                     <p class="profileText">Posts</p>
                 </div>
                 <div class="counts">
-                    <a href="{% url 'show_followers' profile.pk %}">
-                        <h2 class="profileText">{{profile.get_num_followers}}</h2>
+                    <a href="{% url 'show_followers' other_profile.pk %}">
+                        <h2 class="profileText">{{other_profile.get_num_followers}}</h2>
                         <p class="profileText">Followers</p>
                     </a>
                 </div>
                 <div class="counts">
-                    <a href="{% url 'show_following' profile.pk %}">
-                        <h2 class="profileText">{{profile.get_num_following}}</h2>
+                    <a href="{% url 'show_following' other_profile.pk %}">
+                        <h2 class="profileText">{{other_profile.get_num_following}}</h2>
                         <p class="profileText">Following</p>
                     </a>
                 </div>
@@ -45,7 +60,7 @@
         </div>
         <!--Account posts-->
         <div class="postsGrid">
-            {% for post in profile.get_all_posts %}
+            {% for post in other_profile.get_all_posts %}
                 {% for photo in post.get_all_photos %}
                     {% if forloop.first %}
                         <a href="{% url 'show_post' post.pk %}" class="postTile">

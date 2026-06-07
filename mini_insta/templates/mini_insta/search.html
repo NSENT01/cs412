@@ -8,7 +8,7 @@
 
 {% block content %}
 <div class="searchWrapper">
-    <form method="GET" enctype="multipart/form-data" action="{% url 'search' profile.pk %}" class="searchForm">
+    <form method="GET" enctype="multipart/form-data" action="{% url 'search' %}" class="searchForm">
         <input type="search" name="name" placeholder="Search profiles and posts">
         <input type="submit" value="Search">
     </form>

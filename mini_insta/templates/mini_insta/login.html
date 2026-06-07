@@ -1,0 +1,19 @@
+<!--
+    File: mini_insta/login.html
+    Author: Senthilvel Nithin (nsent01@bu.edu), 6/06/2026
+    Description: Show login page
+-->
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<div class="formWrapper">
+    <h2>Login</h2>
+    <form action="{% url 'login' %}" method="POST" enctype="multipart/form-data" class="createForm">
+        {% csrf_token %}
+        {{form}}
+        <input type="submit" value="Login">
+        <input type="hidden" name="next" value="{% url 'show_feed' %}">
+    </form>
+</div>
+{% endblock %}
