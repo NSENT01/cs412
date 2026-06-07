@@ -7,6 +7,15 @@
 {% extends 'mini_insta/base.html' %}
 
 {% block content %}
+{% if request.user.is_authenticated and request.user == post.profile.user %}
+<a href="{% url 'personal_profile' %}" class="back_button">
+    <img src="https://www.pngarts.com/files/8/Round-Back-Button-PNG-Transparent-Image.png" width="25" height="25">
+</a>
+{% else %}
+<a href="{% url 'profile' post.profile.pk %}" class="back_button">
+    <img src="https://www.pngarts.com/files/8/Round-Back-Button-PNG-Transparent-Image.png" width="25" height="25">
+</a>
+{% endif %}
 <div>
     <div class="postsGrid">
         <!--Get all photos to display in the post view-->
