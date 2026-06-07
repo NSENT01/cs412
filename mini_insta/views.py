@@ -39,10 +39,13 @@ class ProfileDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        profile = Profile.objects.get(user=self.request.user)
-        context['profile'] = profile
-        follows = Follower.objects.filter(follower_profile=profile).values_list('profile', flat=True)
-        context['follows'] = follows
+        if self.request.user.is_authenticated:
+            profile = Profile.objects.get(user=self.request.user)
+            context['profile'] = profile
+
+            follows = Follower.objects.filter(follower_profile=profile).values_list('profile', flat=True)
+
+            context['follows'] = follows
 
         return context
 

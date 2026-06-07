@@ -24,7 +24,7 @@
                 <h3 class="profileText">{{other_profile.display_name}}</h3>
                 <p class="profileText">{{other_profile.username}}</p>
                 <p class="profileText"><small>{{other_profile.bio_text}}</small></p>
-                {% if request.user != other_profile.user %}
+                {% if request.user.is_authenticated and request.user != other_profile.user %}
                 {% if other_profile.pk in follows %}
                 <form action="{% url 'delete_follow' other_profile.pk %}" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
