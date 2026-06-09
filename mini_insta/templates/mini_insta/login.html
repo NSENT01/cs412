@@ -15,5 +15,6 @@
         <input type="submit" value="Login">
         <input type="hidden" name="next" value="{% url 'show_feed' %}">
     </form>
+    <p>Don't have an account? Create one <a href="{% url 'create_profile' %}">here</a></p>
 </div>
 {% endblock %}
