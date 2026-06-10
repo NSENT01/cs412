@@ -1,0 +1,18 @@
+<!--
+    File: dadjokes/all_jokes.html
+    Author: Senthilvel Nithin (nsent01@bu.edu), 06/10/2026
+    Description: Display all jokes
+-->
+
+{% extends 'dadjokes/base.html' %}
+
+{% block content %}
+<div class="list">
+    {% for joke in jokes %}
+        <div class="card">
+            <p class="cardMainText">{{ joke.text }}</p>
+            <p><small>Added by {{ joke.name }}</small></p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

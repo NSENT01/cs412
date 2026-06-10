@@ -1,0 +1,13 @@
+<!--
+    File: dadjokes/random.html
+    Author: Senthilvel Nithin (nsent01@bu.edu), 06/10/2026
+    Description: Display random joke and picture
+-->
+
+{% extends 'dadjokes/base.html' %}
+
+{% block content %}
+<div class="card">
+    <img src="{{ picture.image_url }}" class="cardImage">
+</div>
+{% endblock %}

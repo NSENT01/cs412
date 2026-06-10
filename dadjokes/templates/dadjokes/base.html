@@ -1,0 +1,37 @@
+<!--
+    File: dadjokes/base.html
+    Author: Senthilvel Nithin (nsent01@bu.edu), 06/10/2026
+    Description: Base template
+-->
+
+{% load static %}
+
+<html>
+    <head>
+        <title>Dad Jokes</title>
+        <link rel="stylesheet" href="{% static 'styles-dadjokes.css' %}">
+    </head>
+    <body>
+        <!--App title across all pages-->
+        <header class="topbar">Dadjokes</header>
+        <!--Main content dynamically loaded based on route and template-->
+        <main class="page">
+            {% block content %}
+            {% endblock %}
+        </main>
+        <!--Navigation bar with home button, and create post button in each profilr-->
+        <nav class="navbar">
+            <ul class="menu">
+                <li class="menuItem"><a href="{% url 'random' %}">
+                    <img src="https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/randomize-1024.png" width="25" height="25">
+                </a></li>
+                <li class="menuItem"><a href="{% url 'jokes' %}">
+                    <img src="https://www.freeiconspng.com/uploads/checklist-icon-checklist-icon-png-list-icon-7.png" width="25" height="25">
+                </a></li>
+                <li class="menuItem"><a href="{% url 'pictures' %}">
+                    <img src="https://www.svgrepo.com/show/451622/folder-pictures.svg" width="25" height="25">
+                </a></li>
+            </ul>
+        </nav>
+    </body>
+</html>
