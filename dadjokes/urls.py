@@ -8,7 +8,7 @@ from . import views
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('', views.randomJoke, name="home"),
+    path('', views.randomJoke, name="index"),
     path('random/', views.randomJoke, name="random"),
     path('pictures/', views.PictureListView.as_view(), name="pictures"),
     path('picture/<int:pk>/', views.PictureDetailView.as_view(), name="picture"),
