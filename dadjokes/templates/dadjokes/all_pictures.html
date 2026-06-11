@@ -9,9 +9,11 @@
 {% block content %}
 <div class="list">
     {% for picture in pictures %}
-    <div class="card">
-        <img src="{{ picture.image_url }}" class="cardImage">
-    </div>
+    <a href="{% url 'picture' picture.pk %}" class="link">
+        <div class="card">
+            <img src="{{ picture.image_url }}" class="cardImage">
+        </div>
+    </a>
     {% endfor %}
 </div>
 {% endblock %}

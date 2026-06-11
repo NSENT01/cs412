@@ -21,6 +21,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     path('quotes/', include("quotes.urls")),
     path('restaurant/', include("restaurant.urls")),
     path('mini_insta/', include("mini_insta.urls")),

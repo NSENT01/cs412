@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.views.generic import DetailView, ListView
 from .models import Joke, Picture
 from random import randrange
-
+from rest_framework import generics
+from .serializers import *
 # Create your views here.
 
 def randomJoke(request):
@@ -46,3 +47,44 @@ class PictureListView(ListView):
     template_name = 'dadjokes/all_pictures.html'
     context_object_name = 'pictures'
 
+class JokeListCreateView(generics.ListCreateAPIView):
+    '''Return all jokes in JSON'''
+    queryset = Joke.objects.all()
+    serializer_class = JokeSerializer
+
+class PictureListCreateView(generics.ListCreateAPIView):
+    '''Return all pictures in JSON'''
+    queryset = Picture.objects.all()
+    serializer_class = PictureSerializer
+
+class JokeRetrieveView(generics.RetrieveAPIView):
+    '''Return one joke as JSON, support update and delete'''
+    queryset = Joke.objects.all()
+    serializer_class = JokeSerializer
+    lookup_field = 'pk'
+
+class PictureRetrieveView(generics.RetrieveAPIView):
+    '''Return one picture as JSON, support update and delete'''
+    queryset = Picture.objects.all()
+    serializer_class = PictureSerializer
+    lookup_field = 'pk'
+
+class RandomJokeRetrieveView(generics.RetrieveAPIView):
+    '''Return a random joke as JSON'''
+    queryset = Joke.objects.all()
+    serializer_class = JokeSerializer
+
+    def get_object(self):
+        '''Override get_object method to return a random Joke object'''
+        joke = Joke.objects.order_by('?').first()
+        return joke
+    
+class RandomPictureRetrieveView(generics.RetrieveAPIView):
+    '''Return a random picture as JSON'''
+    queryset = Picture.objects.all()
+    serializer_class = PictureSerializer
+
+    def get_object(self):
+        '''Override get_object method to return a random Picture object'''
+        picture = Picture.objects.order_by('?').first()
+        return picture

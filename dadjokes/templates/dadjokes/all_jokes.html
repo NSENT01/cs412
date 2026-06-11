@@ -9,10 +9,12 @@
 {% block content %}
 <div class="list">
     {% for joke in jokes %}
-        <div class="card">
-            <p class="cardMainText">{{ joke.text }}</p>
-            <p><small>Added by {{ joke.name }}</small></p>
-        </div>
+        <a href="{% url 'joke' joke.pk %}" class="link">
+            <div class="card">
+                <p class="cardMainText">{{ joke.text }}</p>
+                <p class="cardSecondaryText"><small>Added by {{ joke.name }}</small></p>
+            </div>
+        </a>
     {% endfor %}
 </div>
 {% endblock %}
