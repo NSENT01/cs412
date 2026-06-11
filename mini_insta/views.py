@@ -25,6 +25,7 @@ class ProfileListView(ListView):
         '''Override this method to add context variable profile'''
         context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
+            # get profile object for request user if they are authenticated
             profile = Profile.objects.get(user=self.request.user)
             context['profile'] = profile
 
@@ -38,11 +39,14 @@ class ProfileDetailView(DetailView):
     context_object_name = 'other_profile'
 
     def get_context_data(self, **kwargs):
+        '''Define context objects to be used in templates'''
         context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
+            # get profile object for request user if they are authenticated
             profile = Profile.objects.get(user=self.request.user)
             context['profile'] = profile
 
+            # filter follows with only profiles
             follows = Follower.objects.filter(follower_profile=profile).values_list('profile', flat=True)
 
             context['follows'] = follows
@@ -63,6 +67,7 @@ class PersonalProfileDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         '''Add context variables'''
         context = super().get_context_data(**kwargs)
+        # get profile object for request user if they are authenticated
         profile = Profile.objects.get(user=self.request.user)
         context['profile'] = profile
 
@@ -136,8 +141,11 @@ class PostDetailView(DetailView):
         '''Override this method to add profile context variable'''
         context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
+            # get profile object for request user if they are authenticated
             profile = Profile.objects.get(user=self.request.user)
             context['profile'] = profile
+
+            # filter likes and only give the post_id in queryset
             context['likes'] = Like.objects.filter(profile=profile).values_list('post_id', flat=True)
 
         return context
@@ -170,6 +178,7 @@ class DeletePostView(LoginRequiredMixin, DeleteView):
         '''Give context data for url routing'''
         context = super().get_context_data(**kwargs)
 
+        # set post context object as post with pk kwarg
         context['post'] = get_object_or_404(Post, pk=self.kwargs['pk'])
 
         context['profile'] = Profile.objects.get(user=self.request.user)
@@ -178,6 +187,7 @@ class DeletePostView(LoginRequiredMixin, DeleteView):
     def get_queryset(self):
         '''Define a queryset for which this view can delete posts'''
         if self.request.user.is_authenticated:
+            # get profile object for request user if they are authenticated
             profile = Profile.objects.get(user=self.request.user)
             return Post.objects.filter(profile=profile)
         else:
@@ -203,14 +213,17 @@ class UpdatePostView(LoginRequiredMixin, UpdateView):
         '''Override this method to add post and profile context variables'''
         context =  super().get_context_data(**kwargs)
 
+        # set post context object as post with pk kwarg
         context['post'] = get_object_or_404(Post, pk=self.kwargs['pk'])
 
+        # get profile object for request user if they are authenticated
         context['profile'] = Profile.objects.get(user=self.request.user)
         return context
     
     def get_queryset(self):
         '''Define the queryset for which this view can update posts'''
         if self.request.user.is_authenticated:
+            # get profile object for request user if they are authenticated
             profile = Profile.objects.get(user=self.request.user)
             return Post.objects.filter(profile=profile)
         else:
@@ -248,7 +261,10 @@ class ShowFeedView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # get profile object for request user if they are authenticated
         profile = Profile.objects.get(user=self.request.user)
+
+        # filter likes for a user with only post_id in queryset
         likes = Like.objects.filter(profile=profile).values_list('post_id', flat=True)
         context['likes'] = likes
 
@@ -273,6 +289,8 @@ class SearchView(LoginRequiredMixin, ListView):
         
         # get general context objects to facilitate search
         profile = Profile.objects.get(user=self.request.user)
+
+        # filter likes by profile with only post_id in queryset
         likes = Like.objects.filter(profile=profile).values_list('post_id', flat=True)
         context = {
             'profile': profile,
@@ -289,8 +307,11 @@ class SearchView(LoginRequiredMixin, ListView):
         if 'name' not in self.request.GET:
             return Post.objects.none()
         
+        # get profile object for request user if they are authenticated
         profile = Profile.objects.get(user=self.request.user)
         name = self.request.GET['name']
+
+        # filter posts based on search params
         posts = Post.objects.filter(profile__username__icontains=name) | Post.objects.filter(profile__display_name__icontains=name) | Post.objects.filter(caption__icontains=name)
         posts = posts.exclude(profile=profile)
 
@@ -299,13 +320,19 @@ class SearchView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         '''Override this method to add profile, profiles, and posts context'''
         context = super().get_context_data(**kwargs)
+
+        # get profile object for request user if they are authenticated
         profile = Profile.objects.get(user=self.request.user)
         context['profile'] = profile
+
+        # get posts from queryset method
         context['posts'] = self.get_queryset()
 
         # get context objects for search request
         if 'name' in self.request.GET:
             name = self.request.GET['name']
+
+            # filter profiles by search params
             context['profiles'] = Profile.objects.filter(username__icontains=name) | Profile.objects.filter(display_name__icontains=name)
             context['profiles'] = context['profiles'].exclude(username=profile.username).exclude(display_name=profile.display_name)
         else:
@@ -323,6 +350,7 @@ class CreateProfileView(CreateView):
         '''Override this method to add the appropriate context variables'''
         context =  super().get_context_data(**kwargs)
 
+        # set create_user to form class object
         context['create_user'] = UserCreationForm()
 
         return context
@@ -330,6 +358,7 @@ class CreateProfileView(CreateView):
     def form_valid(self, form):
         '''Define how the form should write to the database'''
         if self.request.POST:
+            # use object to create instance based on POST data
             create_user = UserCreationForm(self.request.POST)
 
         
@@ -351,8 +380,10 @@ class CreateFollowView(TemplateView):
 
     def dispatch(self, request, *args, **kwargs):
         '''Override the default method to create follow instance'''
+        # get profile object for request user if they are authenticated
         follower_profile = Profile.objects.get(user=request.user)
         profile = Profile.objects.get(pk=self.kwargs['pk'])
+
         # create follow based on retrieved profile
         Follower.objects.create(profile=profile, follower_profile=follower_profile)
         return redirect('profile', pk=profile.pk)
@@ -362,8 +393,10 @@ class DeleteFollowView(TemplateView):
 
     def dispatch(self, request, *args, **kwargs):
         '''Override the default method to delete follow instance'''
+        # get profile object for request user if they are authenticated
         follower_profile = Profile.objects.get(user=request.user)
         profile = Profile.objects.get(pk=self.kwargs['pk'])
+        
         # delete follow based on retrieved profile
         Follower.objects.filter(follower_profile=follower_profile).filter(profile=profile).delete()
         return redirect('profile', pk=profile.pk)
