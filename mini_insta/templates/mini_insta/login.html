@@ -20,7 +20,11 @@
         {% endfor %}
         <input type="submit" value="Login">
         <!--Define next url-->
+        {% if request.GET.next %}
+        <input type="hidden" name="next" value="{{request.GET.next}}">
+        {% else %}
         <input type="hidden" name="next" value="{% url 'show_feed' %}">
+        {% endif %}
     </form>
     <p>Don't have an account? Create one <a href="{% url 'create_profile' %}">here</a></p>
 </div>

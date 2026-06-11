@@ -56,6 +56,10 @@ class PersonalProfileDetailView(LoginRequiredMixin, DetailView):
     template_name = 'mini_insta/show_profile.html'
     context_object_name = 'other_profile'
 
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
+
     def get_context_data(self, **kwargs):
         '''Add context variables'''
         context = super().get_context_data(**kwargs)
@@ -73,6 +77,10 @@ class CreatePostView(LoginRequiredMixin, CreateView):
 
     form_class = CreatePostForm
     template_name = 'mini_insta/create_post_form.html'
+
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
 
     def get_context_data(self):
         '''Give context data for url routing'''
@@ -141,9 +149,16 @@ class UpdateProfileView(LoginRequiredMixin, UpdateView):
     form_class = UpdateProfileForm
     template_name = 'mini_insta/update_profile_form.html'
 
-    def get_object(self, queryset = ...):
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
+
+    def get_object(self):
         '''Define the context object based on the logged in user'''
-        return Profile.objects.get(user=self.request.user)
+        if self.request.user.is_authenticated:
+            return Profile.objects.get(user=self.request.user)
+        else:
+            return Profile.objects.none()
 
 class DeletePostView(LoginRequiredMixin, DeleteView):
     '''Create a subclass of DeleteView to delete a post from our database'''
@@ -162,8 +177,11 @@ class DeletePostView(LoginRequiredMixin, DeleteView):
     
     def get_queryset(self):
         '''Define a queryset for which this view can delete posts'''
-        profile = Profile.objects.get(user=self.request.user)
-        return Post.objects.filter(profile=profile)
+        if self.request.user.is_authenticated:
+            profile = Profile.objects.get(user=self.request.user)
+            return Post.objects.filter(profile=profile)
+        else:
+            return Post.objects.none()
     
     def get_success_url(self):
         '''Define the URL to which succesful deletion should redirect the user'''
@@ -177,6 +195,10 @@ class UpdatePostView(LoginRequiredMixin, UpdateView):
     form_class = UpdatePostForm
     template_name = 'mini_insta/update_post_form.html'
 
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
+
     def get_context_data(self, **kwargs):
         '''Override this method to add post and profile context variables'''
         context =  super().get_context_data(**kwargs)
@@ -188,8 +210,11 @@ class UpdatePostView(LoginRequiredMixin, UpdateView):
     
     def get_queryset(self):
         '''Define the queryset for which this view can update posts'''
-        profile = Profile.objects.get(user=self.request.user)
-        return Post.objects.filter(profile=profile)
+        if self.request.user.is_authenticated:
+            profile = Profile.objects.get(user=self.request.user)
+            return Post.objects.filter(profile=profile)
+        else:
+            return Post.objects.none()
     
     def get_success_url(self):
         '''Define a redirection url after this view executes succesfully'''
@@ -217,6 +242,10 @@ class ShowFeedView(LoginRequiredMixin, DetailView):
     template_name = 'mini_insta/show_feed.html'
     context_object_name = 'profile'
 
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         profile = Profile.objects.get(user=self.request.user)
@@ -233,11 +262,14 @@ class SearchView(LoginRequiredMixin, ListView):
 
 
     template_name = 'mini_insta/search_results.html'
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
 
     def dispatch(self, request, *args, **kwargs):
         '''Override dispatch method to return based on incoming form data'''
         if not self.request.user.is_authenticated:
-            return super().dispatch(request, *args, **kwargs)
+            return self.handle_no_permission()
         
         # get general context objects to facilitate search
         profile = Profile.objects.get(user=self.request.user)
