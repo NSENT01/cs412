@@ -239,6 +239,7 @@ class SearchView(LoginRequiredMixin, ListView):
         if not self.request.user.is_authenticated:
             return super().dispatch(request, *args, **kwargs)
         
+        # get general context objects to facilitate search
         profile = Profile.objects.get(user=self.request.user)
         likes = Like.objects.filter(profile=profile).values_list('post_id', flat=True)
         context = {
@@ -270,6 +271,7 @@ class SearchView(LoginRequiredMixin, ListView):
         context['profile'] = profile
         context['posts'] = self.get_queryset()
 
+        # get context objects for search request
         if 'name' in self.request.GET:
             name = self.request.GET['name']
             context['profiles'] = Profile.objects.filter(username__icontains=name) | Profile.objects.filter(display_name__icontains=name)
@@ -300,7 +302,7 @@ class CreateProfileView(CreateView):
 
         
         user = create_user.save()
-
+        # automatically log in when account is created
         login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
 
         form.instance.user = user
@@ -319,6 +321,7 @@ class CreateFollowView(TemplateView):
         '''Override the default method to create follow instance'''
         follower_profile = Profile.objects.get(user=request.user)
         profile = Profile.objects.get(pk=self.kwargs['pk'])
+        # create follow based on retrieved profile
         Follower.objects.create(profile=profile, follower_profile=follower_profile)
         return redirect('profile', pk=profile.pk)
     
@@ -329,6 +332,7 @@ class DeleteFollowView(TemplateView):
         '''Override the default method to delete follow instance'''
         follower_profile = Profile.objects.get(user=request.user)
         profile = Profile.objects.get(pk=self.kwargs['pk'])
+        # delete follow based on retrieved profile
         Follower.objects.filter(follower_profile=follower_profile).filter(profile=profile).delete()
         return redirect('profile', pk=profile.pk)
 
@@ -338,8 +342,10 @@ class CreateLikeView(TemplateView):
     def dispatch(self, request, *args, **kwargs):
         '''Override the default method to create like instance'''
         if 'pk' in self.kwargs:
+            # get post
             post = Post.objects.get(pk=self.kwargs['pk'])
         profile = Profile.objects.get(user=request.user)
+        # create like on post
         Like.objects.create(post=post, profile=profile)
         return redirect('show_post', pk=post.pk)
     
@@ -349,8 +355,10 @@ class DeleteLikeView(TemplateView):
     def dispatch(self, request, *args, **kwargs):
         '''Override the default method to delete like instance'''
         if 'pk' in self.kwargs:
+            # get post
             post = Post.objects.get(pk=self.kwargs['pk'])
         profile = Profile.objects.get(user=request.user)
+        # delete like on post
         Like.objects.filter(post=post).filter(profile=profile).delete()
         return redirect('show_post', pk=post.pk)
 

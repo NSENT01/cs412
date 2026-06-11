@@ -22,13 +22,27 @@
         <div class="postsGridMain">
             {% for profile in profiles %}
                 {% for post in profile.get_all_posts %}
+                    {% if not profile.get_all_posts %}
+                    <!--Default display image if no image was uploaded-->
+                        <a href="{% url 'show_post' post.pk %}" class="postTileMain">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/3840px-No_image_available.svg.png" alt="Post photo">
+                        </a>
+                    {% else %}
                     {% for photo in post.get_all_photos %}
+                    <!---Display logic for when post does have photos-->
                         {% if forloop.first %}
+                        {% if not photo %}
+                            <a href="{% url 'show_post' post.pk %}" class="postTileMain">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/3840px-No_image_available.svg.png" alt="Post photo">
+                            </a>
+                        {% else %}
                             <a href="{% url 'show_post' post.pk %}" class="postTileMain">
                                 <img src="{{ photo.get_image_url }}" alt="Post photo">
                             </a>
                         {% endif %}
+                        {% endif %}
                     {% endfor %}
+                    {% endif %}
                     <!--Post caption and timestamp-->
                     <p>{{post.caption}}</p>
                     <p><small>{{post.timestamp}}</small></p>

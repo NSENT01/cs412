@@ -19,11 +19,50 @@
 <div>
     <div class="postsGrid">
         <!--Get all photos to display in the post view-->
+            {% if not post.get_all_photos %}
+            <!--If a post does not have photos associated with it-->
+                <div>
+                    
+                    <a href="{% url 'show_post' post.pk %}" class="postTile">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/3840px-No_image_available.svg.png" alt="Post photo">
+                    </a>
+                    
+                    {% if request.user.is_authenticated and request.user != post.profile.user %}
+                    {% if post.pk in likes %}
+                    <form action="{% url 'delete_like' post.pk %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="image" src="https://freepngimg.com/thumb/heart/36704-5-dark-red-heart-transparent-background.png" class="imageButton" alt="submit">
+                    </form>
+                    {% else %}
+                    <form action="{% url 'like' post.pk %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="image" src="https://clipground.com/images/heart-transparent-png-3.png" class="imageButton" alt="submit">
+                    </form>
+                    <!--Like display logic-->
+                    {% endif %}
+                    {% if post.get_likes|length > 1 %}
+                        <p>Liked by <b>{{post.get_likes.0.profile}}</b> and {{post.get_num_likes_minus_1}} others</p>
+                    {% elif post.get_likes|length == 0 %}
+                        <p>No likes</p>
+                    {% else %}
+                        <p>Liked by <b>{{post.get_likes.0.profile}}</b></p>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            {% else %}
             {% for photo in post.get_all_photos %}
+            <!--If a post does have photos-->
             <div>
+                {% if not photo %}
+                <a href="{% url 'show_post' post.pk %}" class="postTile">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/3840px-No_image_available.svg.png" alt="Post photo">
+                </a>
+                {% else %}
                 <a href="{% url 'show_post' post.pk %}" class="postTile">
                     <img src="{{ photo.get_image_url }}" alt="Post photo">
                 </a>
+                {% endif %}
+                {% if forloop.first %}
                 {% if request.user.is_authenticated and request.user != post.profile.user %}
                 {% if post.pk in likes %}
                 <form action="{% url 'delete_like' post.pk %}" method="POST" enctype="multipart/form-data">
@@ -36,6 +75,7 @@
                     <input type="image" src="https://clipground.com/images/heart-transparent-png-3.png" class="imageButton" alt="submit">
                 </form>
                 {% endif %}
+                <!--Like display logic-->
                 {% if post.get_likes|length > 1 %}
                     <p>Liked by <b>{{post.get_likes.0.profile}}</b> and {{post.get_num_likes_minus_1}} others</p>
                 {% elif post.get_likes|length == 0 %}
@@ -44,8 +84,10 @@
                     <p>Liked by <b>{{post.get_likes.0.profile}}</b></p>
                 {% endif %}
                 {% endif %}
+                {% endif %}
             </div>
             {% endfor %}
+            {% endif %}
         </div>
     <div>
         <!--Post caption and timestamp-->
@@ -58,6 +100,7 @@
         </div>
         {% endfor %}
         {% if request.user.is_authenticated and request.user == post.profile.user %}
+        <!--Option to delete or update post if the user is the owner of the post-->
         <div class="confirmation">
             <a href="{% url 'delete_post' post.pk %}" class="button secondary">Delete</a>
             <a href="{% url 'update_post' post.pk %}" class="button secondary">Update</a>

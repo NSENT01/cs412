@@ -8,6 +8,7 @@
 
 {% block content %}
 <div class="searchWrapper">
+    <!--Form for searching through posts and profiles-->
     <form method="GET" enctype="multipart/form-data" action="{% url 'search' %}" class="searchForm">
         <input type="search" name="name" placeholder="Search profiles and posts">
         <input type="submit" value="Search">

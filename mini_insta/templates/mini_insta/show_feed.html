@@ -13,7 +13,45 @@
             <div>
                 <div class="postsGrid">
                     <!--Get all photos to display in the post view-->
+                        {% if not post.get_all_photos %}
+                        <!--Default display if post has no photos-->
+                            <div>
+                                <div class="profileList">
+                                    <a href="{% url 'profile' post.profile.pk %}" >
+                                        <img src="{{ post.profile.profile_image_url }}" alt="Profile photo" class="profileImageFeed">
+                                    </a>
+                                    <h4>{{post.profile.username}}</h4>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                </div>
+                               
+                                <a href="{% url 'show_post' post.pk %}" class="postTile">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/3840px-No_image_available.svg.png" alt="Post photo">
+                                </a>
+                                <!--Like display logic-->
+                                {% if post.pk in likes %}
+                                <form action="{% url 'delete_like' post.pk %}" method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <input type="image" src="https://freepngimg.com/thumb/heart/36704-5-dark-red-heart-transparent-background.png" class="imageButton" alt="submit">
+                                </form>
+                                {% else %}
+                                <form action="{% url 'like' post.pk %}" method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <input type="image" src="https://clipground.com/images/heart-transparent-png-3.png" class="imageButton" alt="submit">
+                                </form>
+                                {% endif %}
+                                {% if post.get_likes|length > 1 %}
+                                    <p>Liked by <b>{{post.get_likes.0.profile}}</b> and {{post.get_num_likes_minus_1}} others</p>
+                                {% elif post.get_likes|length == 0 %}
+                                    <p>No likes</p>
+                                {% else %}
+                                    <p>Liked by <b>{{post.get_likes.0.profile}}</b></p>
+                                {% endif %}
+                            </div>
+                        {% else %}
                         {% for photo in post.get_all_photos %}
+                        <!--When a post does have photos associated with it-->
                         {% if forloop.first %}
                         <div>
                             <div class="profileList">
@@ -25,9 +63,16 @@
                                 <div></div>
                                 <div></div>
                             </div>
+                            {% if not photo %}
+                            <a href="{% url 'show_post' post.pk %}" class="postTile">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/3840px-No_image_available.svg.png" alt="Post photo">
+                            </a>
+                            {% else %}
                             <a href="{% url 'show_post' post.pk %}" class="postTile">
                                 <img src="{{ photo.get_image_url }}" alt="Post photo">
                             </a>
+                            {% endif %}
+                            <!--Like display logic-->
                             {% if post.pk in likes %}
                             <form action="{% url 'delete_like' post.pk %}" method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
@@ -49,6 +94,7 @@
                         </div>
                         {% endif %}
                         {% endfor %}
+                        {% endif %}
                     </div>
                 <div>
                     <!--Post caption and timestamp-->

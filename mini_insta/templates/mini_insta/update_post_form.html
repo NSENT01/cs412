@@ -16,7 +16,12 @@
         {% csrf_token %}
         <!--Django form object-->
         <table>
-            {{form.as_table}}
+            {% for field in form %}
+                <div class="form-group">
+                    <label>{{ field.label }}</label>
+                    {{ field }}
+                </div>
+            {% endfor %}
             <!--Separate field for submitting request-->
             
             <tr>

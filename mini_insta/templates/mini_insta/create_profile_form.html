@@ -10,8 +10,20 @@
     <h2>Create a new profile</h2>
     <form action="{% url 'create_profile' %}" method="POST" enctype="multipart/form-data" class="createForm">
         {% csrf_token %}
-        {{form}}
-        {{create_user}}
+        <!--Form for creating a profile, looping through fields for styling-->
+        {% for field in form %}
+            <div class="form-group">
+                <label>{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endfor %}
+        <!--Form for creating a user, looping through fields for styling-->
+        {% for field in create_user %}
+            <div class="form-group">
+                <label>{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endfor %}
         <input type="submit" value="Create">
         <input type="hidden" name="next" value="{% url 'home' %}">
     </form>

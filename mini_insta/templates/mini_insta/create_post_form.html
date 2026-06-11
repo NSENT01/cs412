@@ -16,7 +16,12 @@
         {% csrf_token %}
         <!--Django form object-->
         <table>
-            {{form.as_table}}
+            {% for field in form %}
+                <div class="form-group">
+                    <label>{{ field.label }}</label>
+                    {{ field }}
+                </div>
+            {% endfor %}
             <!--Separate field for selecting image files-->
             
             <tr>
@@ -24,7 +29,7 @@
                     <label for="image_url">Select Images: </label>
                 </th>
                 <td>
-                    <input type="file" name="image_files" multiple required>
+                    <input type="file" name="image_files" multiple>
                 </td>
             </tr>
             <tr>

@@ -22,6 +22,7 @@
         <!--Navigation bar with home button, and create post button in each profilr-->
         <nav class="navbar">
             <ul class="menu">
+                <!--Nav bar for an authenticated user-->
                 {% if request.user.is_authenticated %}
                 <li class="menuItem"><a href="{% url 'show_feed' %}">
                     <img src="https://www.freeiconspng.com/uploads/home-button-png-icon-30.png" width="25" height="25">
@@ -43,6 +44,7 @@
                     </form>
                 </li>
                 {% else %}
+                <!--Nav bar for an unauthenticated user-->
                 <li class="menuItem"><a href="{% url 'home' %}">
                     <img src="https://www.freeiconspng.com/uploads/home-button-png-icon-30.png" width="25" height="25">
                 </a></li>

@@ -24,6 +24,7 @@
                 <h3 class="profileText">{{other_profile.display_name}}</h3>
                 <p class="profileText">{{other_profile.username}}</p>
                 <p class="profileText"><small>{{other_profile.bio_text}}</small></p>
+                <!--If user is authenticated they can follow or unfollow other users-->
                 {% if request.user.is_authenticated and request.user != other_profile.user %}
                 {% if other_profile.pk in follows %}
                 <form action="{% url 'delete_follow' other_profile.pk %}" method="POST" enctype="multipart/form-data">
@@ -61,6 +62,11 @@
         <!--Account posts-->
         <div class="postsGrid">
             {% for post in other_profile.get_all_posts %}
+                {% if not post.get_all_photos %}
+                    <a href="{% url 'show_post' post.pk %}" class="postTile">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/3840px-No_image_available.svg.png" alt="Post photo">
+                    </a>
+                {% else %}
                 {% for photo in post.get_all_photos %}
                     {% if forloop.first %}
                         <a href="{% url 'show_post' post.pk %}" class="postTile">
@@ -68,6 +74,7 @@
                         </a>
                     {% endif %}
                 {% endfor %}
+                {% endif %}
             {% endfor %}
         </div>
     </div>

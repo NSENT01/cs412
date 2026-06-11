@@ -9,10 +9,17 @@
 {% block content %}
 <div class="formWrapper">
     <h2>Login</h2>
+    <!--Form for logging in-->
     <form action="{% url 'login' %}" method="POST" enctype="multipart/form-data" class="createForm">
         {% csrf_token %}
-        {{form}}
+        {% for field in form %}
+            <div class="form-group">
+                <label>{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endfor %}
         <input type="submit" value="Login">
+        <!--Define next url-->
         <input type="hidden" name="next" value="{% url 'show_feed' %}">
     </form>
     <p>Don't have an account? Create one <a href="{% url 'create_profile' %}">here</a></p>

@@ -93,6 +93,8 @@ class Post(models.Model):
     def get_all_comments(self):
         '''Return a list of all comments on a post object'''
         ret = []
+
+        # loop through comments made by on the post
         comments = Comment.objects.filter(post=self)
         for comment in comments:
             ret.append(comment)
@@ -101,6 +103,8 @@ class Post(models.Model):
     def get_likes(self):
         '''Return a list of likes on a post object'''
         ret = []
+
+        # loop through likes on post
         likes = Like.objects.filter(post=self)
         for like in likes:
             ret.append(like)
@@ -125,6 +129,7 @@ class Photo(models.Model):
     
     def get_image_url(self):
         '''Return the image url, handling if its a link or a file'''
+        # standardize image reference method
         if self.image_url:
             return self.image_url
         else:
