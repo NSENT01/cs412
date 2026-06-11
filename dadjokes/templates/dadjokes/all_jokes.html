@@ -8,6 +8,7 @@
 
 {% block content %}
 <div class="list">
+    <!--Display all joke cards-->
     {% for joke in jokes %}
         <a href="{% url 'joke' joke.pk %}" class="link">
             <div class="card">

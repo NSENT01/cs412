@@ -1,3 +1,7 @@
+# File: dadjokes/views.py
+# Author: Nithin Senthilvel (nsent01@bu.edu), 06/10/2026
+# Description: Define the api views and the web page views
+
 from django.shortcuts import render
 from django.views.generic import DetailView, ListView
 from .models import Joke, Picture
@@ -12,6 +16,8 @@ def randomJoke(request):
     template = 'dadjokes/random.html'
     jokes = list(Joke.objects.all())
     pictures = list(Picture.objects.all())
+
+    # return a random joke and picture from after retrieving all of them
     context = {
         'joke': jokes[randrange(0, len(jokes))],
         'picture': pictures[randrange(0, len(pictures))],

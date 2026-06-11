@@ -1,3 +1,7 @@
+# File: dadjokes/serializers.py
+# Author: Nithin Senthilvel (nsent01@bu.edu), 06/10/2026
+# Description: Define serializers for api endpoints
+
 from rest_framework import serializers
 from .models import *
 

@@ -1,3 +1,7 @@
+# File: dadjokes/models.py
+# Author: Nithin Senthilvel (nsent01@bu.edu), 06/10/2026
+# Description: Define all data models for this app
+
 from django.db import models
 
 # Create your models here.

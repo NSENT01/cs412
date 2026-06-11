@@ -8,6 +8,7 @@
 
 {% block content %}
 <div class="list">
+    <!--Display all picture cards-->
     {% for picture in pictures %}
     <a href="{% url 'picture' picture.pk %}" class="link">
         <div class="card">
