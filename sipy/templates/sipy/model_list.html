@@ -1,16 +1,25 @@
+<!--
+    File: sipy/model_list.html
+    Author: Senthilvel Nithin (nsent01@bu.edu), 6/01/2026
+    Description: Show a profiles feed 
+-->
+
 {% extends "sipy/base.html" %}
 
+<!--Dynamic display of model records as tables for all models-->
 {% block content %}
     {% if rows %}
         <table>
             <thead>
                 <tr>
+                    <!-- field names for header as defined in custom view-->
                     {% for field in fields %}
                         <th>{{ field }}</th>
                     {% endfor %}
                 </tr>
             </thead>
             <tbody>
+                <!-- rows of records for model as defined in custom view-->
                 {% for row in rows %}
                     <tr>
                         {% for value in row %}
@@ -21,6 +30,7 @@
             </tbody>
         </table>
     {% else %}
+    <!-- empty state-->
         <div class="empty">No records yet.</div>
     {% endif %}
 {% endblock %}

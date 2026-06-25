@@ -1,8 +1,15 @@
 
+<!--
+    File: sipy/base.html
+    Author: Senthilvel Nithin (nsent01@bu.edu), 6/15/2026
+    Description: Base html template for generic list views of data models
+-->
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Standard meta tags for devide width view ports, page title, and stylesheet-->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ page_title }} | Sipy</title>
@@ -10,6 +17,7 @@
 </head>
 <body>
     <header>
+        <!-- Standard top nav bar with routes to all data model list views-->
         <div class="shell topbar">
             <h1>{{ page_title }}</h1>
             <nav>

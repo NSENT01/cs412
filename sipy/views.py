@@ -1,3 +1,7 @@
+# File: spiy/views.py
+# Author: Nithin Senthilvel (nsent01@bu.edu), 6/12/2026
+# Description: Defining the views for the urls in sipy api app
+
 from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -31,12 +35,15 @@ class SipyModelListView(ListView):
         for obj in context['objects']:
             values = []
 
+            # add fields of model instances to values
             for field in self.fields:
                 value = getattr(obj, field)
                 values.append(value)
 
+            # addend model instance as row in rows
             rows.append(values)
 
+        # define model fields for headers, rows for data, and page title for routing and display
         context['fields'] = self.fields
         context['rows'] = rows
         context['page_title'] = self.page_title
@@ -110,12 +117,15 @@ class GetSingleProfileView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
     
     def get_object(self):
+        '''Define profile to be sent in response'''
         return Profile.objects.get(user=self.request.user)
 
 class UpdateProfileView(generics.UpdateAPIView):
     '''Inherit from UpdateAPIView to update the logged in user's profile'''
     serializer_class = ProfileUpdateSerializer
     permission_classes = [IsAuthenticated]
+
+    # define classes for getting form data, and http method patch for partial data modification
     parser_classes = [MultiPartParser, FormParser]
     http_method_names = ['patch']
 
@@ -153,20 +163,6 @@ class GetCafeView(generics.RetrieveAPIView):
 class CreateCafeView(generics.CreateAPIView):
     '''Inherit from CreateAPIView to create a cafe in the database'''
     serializer_class = CafeSerializer
-    permission_classes = [IsAuthenticated]
-    
-class GetDrinkView(generics.RetrieveAPIView):
-    '''Inherit from RetrieveAPIView to get a single drinks details'''
-    serializer_class = DrinkSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_object(self):
-        '''Define the object that will be returned with a get request'''
-        return Drink.objects.get(cafe__placeId=self.request.GET['cafe'], name=self.request.GET['name'])
-    
-class CreateDrinkView(generics.CreateAPIView):
-    '''Inherit from CreateAPIView to create an instance of a drink'''
-    serializer_class = DrinkSerializer
     permission_classes = [IsAuthenticated]
 
 class GetRankingView(generics.RetrieveAPIView):
@@ -223,9 +219,20 @@ class GetFollowingView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
+        '''Define the queryset that defines the following list view'''
+
+        # get the requests user and their username
+        username = self.request.GET.get('username')
+        user = self.request.user
+
+        # if they dont exist throw 404
+        if username:
+            user = get_object_or_404(User, username=username)
+
+        # filter profiles for profiles that this user follows
         return Profile.objects.filter(
-            user__followers__user=self.request.user
-        )
+            user__followers__user=user
+        ).exclude(user=user).distinct()
     
 class GetFollowersView(generics.ListAPIView):
     '''Inherit from the list api view to get a users followers'''
@@ -233,9 +240,20 @@ class GetFollowersView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        '''Override queryset method to define list of profiles for followers list'''
+
+        # get the user from request and their username
+        username = self.request.GET.get('username')
+        user = self.request.user
+
+        # if they don't exist return 404 status code
+        if username:
+            user = get_object_or_404(User, username=username)
+
+        # filter profiles for profiles that follow the request user
         return Profile.objects.filter(
-            user__following__followed=self.request.user
-        )
+            user__following__followed=user
+        ).exclude(user=user).distinct()
 
 class GetAllProfilesView(generics.ListAPIView):
     '''Inherit from ListAPIView to retrieve all profile data'''
@@ -245,6 +263,8 @@ class GetAllProfilesView(generics.ListAPIView):
     def get_queryset(self):
         '''Override queryset method to return profiles sorted by number of rankings'''
         profiles = list(Profile.objects.all())
+
+        # sort the profiles based on the number of rankings as this is only used for leaderboard data
         profiles.sort(
             key=lambda profile: profile.get_num_rankings(),
             reverse=True
@@ -257,14 +277,17 @@ class GetTasteProfileView(generics.GenericAPIView):
 
     def get(self, request):
         '''Return cafe counts and aggregate ratings by country and city'''
+
+        # get user from request and username, return 404 if they dont exist
         username = request.GET.get('username')
         user = request.user
-
         if username:
             user = get_object_or_404(User, username=username)
 
+        # get rankings made by this user
         user_rankings = Ranking.objects.filter(user=user)
 
+        # orm methods stringed together to get the countries this user has eaten at with annotations for the number of cafes and the avg rating of this country
         countries = user_rankings.values(
             'drink__cafe__country'
         ).annotate(
@@ -272,6 +295,7 @@ class GetTasteProfileView(generics.GenericAPIView):
             aggregate_rating=Avg('score'),
         ).order_by('drink__cafe__country')
 
+        # orm methods stringed together to get the cities this user has eaten at with annotations for the number of cafes and the avg rating of this country
         cities = user_rankings.values(
             'drink__cafe__city'
         ).annotate(
@@ -279,6 +303,7 @@ class GetTasteProfileView(generics.GenericAPIView):
             aggregate_rating=Avg('score'),
         ).order_by('drink__cafe__city')
 
+        # define response without complete new serializer to account for annotations, 2 json objects, with nested lists
         return Response({
             'countries': [
                 {
@@ -327,11 +352,16 @@ class ProfileSearchView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        '''Override queryset method to get profiles that match query'''
+
+        # get query from search query
         query = self.request.GET.get('q', '')
 
-        if not query:
+        # if nothing entered return no profiles
+        if not query:   
             return Profile.objects.none()
 
+        # otherwise query profiles for matching usernames, first names or last names, excluding the user who made the request
         return Profile.objects.filter(
             Q(user__username__icontains=query) |
             Q(first_name__icontains=query) |

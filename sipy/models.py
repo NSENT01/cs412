@@ -32,15 +32,11 @@ class Profile(models.Model):
     
     def get_following(self):
         '''Return the list of users that this user is following'''
-        return Follow.objects.filter(user=self.user)
+        return Follow.objects.filter(user=self.user).exclude(followed=self.user)
     
     def get_followers(self):
         '''Return the list of users that are following this user'''
-        return Follow.objects.filter(followed=self.user)
-    
-    def get_personal_rankings(self):
-        '''Return the user's personal rankings'''
-        return Ranking.objects.filter(user=self.user)
+        return Follow.objects.filter(followed=self.user).exclude(user=self.user)
     
     def get_want_to_try(self):
         '''Return the user's want to try list'''
@@ -54,23 +50,6 @@ class Profile(models.Model):
         '''Return the number of rankings'''
         return len(self.get_user_rankings())
     
-    def get_user_ranking_of_cafe(self, cafe):
-        '''Return the user's ranking of a specific cafe'''
-        rankings = Ranking.objects.filter(user=self.user, drink__cafe=cafe)
-        if not rankings:
-            return None
-        return sum(ranking.score for ranking in rankings) / len(rankings)
-    
-    def get_following_ranking_of_cafe(self, cafe):
-        '''Return the user's follower's ranking of a specific cafe'''
-        followers = Follow.objects.filter(user=self.user)
-        rankings = []
-        for follow in followers:
-            rankings += list(Ranking.objects.filter(user=follow.followed, drink__cafe=cafe))
-        if not rankings:
-            return None
-        return sum(ranking.score for ranking in rankings) / len(rankings)
-
 
 class Cafe(models.Model):
     '''Encapsulate the idea of a cafe item'''
@@ -99,10 +78,6 @@ class Cafe(models.Model):
     def get_num_rankings(self):
         '''Return the number of rankings for this cafe'''
         return Ranking.objects.filter(drink__cafe=self).count()
-    
-    def get_images(self):
-        '''Return the images uploaded by people of this cafe'''
-        return Ranking.objects.filter(drink__cafe=self).values_list('image', flat=True)
     
     def get_friend_rankings(self, users):
         '''Return the rankings made by a users friends'''

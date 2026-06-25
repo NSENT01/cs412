@@ -1,0 +1,424 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    margin: 0;
+    padding: 72px 16px 88px;
+    background: #fafafa;
+    color: #262626;
+}
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: #fff;
+    border-bottom: 1px solid #dbdbdb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10
+}
+.title {
+    display: flex;
+    justify-content: center;
+    color:#262626;
+    text-decoration: none;
+    font-weight: 700;
+}
+.page {
+    width: min(100%, 935px);
+    margin: 0 auto;
+}
+.main {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.navbar {
+    position: fixed;
+    transform: translateX(-50%);
+    width: min(420px, calc(100% - 32px));
+    background: #fff;
+    border: 1px solid #dbdbdb;
+    border-radius: 999px;
+    padding: 10px 20px;
+    bottom: 12px;
+    left: 50%;
+    z-index: 20;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+.menu {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.menuItem {
+    text-decoration: none;
+    font-size: 26px;
+    color: #262626;
+    line-height: 1;
+}
+.profileImage {
+    border-radius: 100%;
+    object-fit: cover;
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    border: 1px solid #dbdbdb;
+}
+.profileImageNav {
+    border-radius: 100%;
+    object-fit: cover;
+    width: 25px;
+    height: 25px;
+    border: 1px solid #dbdbdb;
+}
+.profileImageFeed {
+    border-radius: 100%;
+    object-fit: cover;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #dbdbdb;
+}
+.profileBar {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.profileHeaderPosts {
+    width: 100%
+}
+.accountHeader {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    padding: 28px 0;
+    align-items: center;
+    gap: 32px;
+    border-bottom: 1px solid #dbdbdb;
+}
+.accountAnalytics {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 32px;
+    
+}
+.profile {
+    display: contents;
+}
+.profileText {
+    margin-top: 5;
+    margin-bottom: 5;
+}
+.counts {
+    text-align: center;
+    text-decoration: none;
+}
+.counts a {
+    text-decoration: none;
+}
+.counts h2 {
+    margin: 0;
+    font-size: 18px;
+    text-decoration: none;
+    color: #262626;
+}
+.counts p {
+    margin: 4px 0 0;
+    color: #737373;
+    text-decoration: none;
+}
+.postsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    margin-top: 4px;
+}
+.postTile {
+    aspect-ratio: 1;
+    display: block;
+    background: #efefef;
+    overflow: hidden;
+}
+.postTile img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+.postsGridMain {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: min(100%, 400px);
+    margin: 0 auto;
+    gap: 16px;
+}
+.postTileMain {
+    aspect-ratio: 1;
+    display: block;
+    background: #efefef;
+    border: 1px solid #dbdbdb;
+    overflow: hidden;
+}
+.postTileMain img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+.formWrapper {
+    width: min(100%, 420px);
+    margin: 40px auto 0;
+}
+.formWrapper h2 {
+    text-align: center;
+}
+.createForm {
+    background: #fff;
+    border: 1px solid #dbdbdb;
+    border-radius: 8px;
+    padding: 24px;
+}
+.createForm table {
+    width: 100%;
+}
+.createForm input[type="file"] {
+    width: 100%;
+    margin-top: 8px;
+}
+
+.createForm input[type="submit"],
+.createForm .button {
+    display: inline-block;
+    width: 100px;
+    height: 40px;
+    margin-top: 16px;
+    padding: 9px 16px;
+    border-radius: 8px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.createForm input[type="submit"] {
+    border: 0;
+    background: #0095f6;
+    color: white;
+}
+
+.createForm .button.secondary {
+    background: #efefef;
+    color: #262626;
+    text-align: center;
+}
+.edits .button {
+    display: inline-block;
+    width: 60px;
+    height: 20px;
+    margin-top: 8px;
+    padding: 0;
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 9px;
+}
+.edits .button.secondary {
+    background: #efefef;
+    color: #262626;
+    text-align: center;
+    justify-content: center;
+}
+.profile .edits {
+    display: flex
+}
+
+.confirmation input[type="submit"],
+.confirmation .button {
+    display: inline-block;
+    width: 100px;
+    height: 40px;
+    margin-top: 16px;
+    padding: 9px 16px;
+    border-radius: 8px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+}
+.confirmation .button.secondary {
+    background: #efefef;
+    color: #262626;
+    text-align: center;
+    justify-content: center;
+}
+.confirmation input[type="submit"] {
+    border: 0;
+    background: #0095f6;
+    color: white;
+}
+.confirmation .secondary input[type="submit"] {
+    border: 0;
+    background: #efefef;
+    color: #262626;
+    margin-left: 8px
+}
+.confirmation {
+    display: flex;
+}
+.followList {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 4px;
+}
+.profileList {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    margin-top: 4px;
+}
+.profileText h2 {
+    text-decoration: none;
+    color: #262626;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.profileText p {
+    text-decoration: none;
+    color: #737373;
+}
+.profile {
+    text-decoration: none;
+}
+.link {
+    text-decoration: none;
+}
+.profileList:hover {
+    border: 1px solid #737373;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.centerWrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.feedContainer {
+    width: min(100%, 470px);
+}
+
+.feedContainer .postsGrid {
+    grid-template-columns: 1fr;
+}
+
+.searchWrapper {
+    width: min(100%, 460px);
+    margin: 40px auto 0;
+}
+
+.searchForm {
+    display: flex;
+    gap: 10px;
+    background: #fff;
+    border: 1px solid #dbdbdb;
+    border-radius: 8px;
+    padding: 18px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.searchForm input[type="search"] {
+    flex: 1;
+    min-width: 0;
+    height: 40px;
+    border: 1px solid #dbdbdb;
+    border-radius: 8px;
+    padding: 0 12px;
+    font: inherit;
+}
+
+.searchForm input[type="search"]:focus {
+    border-color: #0095f6;
+    outline: none;
+}
+
+.searchForm input[type="submit"] {
+    width: 100px;
+    height: 40px;
+    border: 0;
+    border-radius: 8px;
+    background: #0095f6;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+}
+.follow {
+    width: 100px;
+    height: 40px;
+    border: 0;
+    border-radius: 8px;
+    background: #0095f6;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+}
+.unfollow {
+    width: 100px;
+    height: 40px;
+    border: 0;
+    border-radius: 8px;
+    background: #efefef;
+    color: #262626;
+    font-weight: 700;
+    cursor: pointer;
+}
+.imageButton {
+    display: block;
+    line-height: 0;
+    background: none;
+    border: none;
+    text-decoration: none;
+    width: 25px;
+    height: 25px;
+}
+
+
+.logout {
+    margin: 0;
+    padding: 0;
+    width: 25px;
+    height: 25px;
+}
+.back-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+}
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin: 15px;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+}
