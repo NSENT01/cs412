@@ -13,4 +13,4 @@ COPY . .
 
 RUN python manage.py collectstatic --noinput
 
-CMD python manage.py migrate && gunicorn cs412.wsgi --bind 0.0.0.0:${PORT:-8000}
+CMD ["sh", "-c", "python manage.py migrate && gunicorn cs412.wsgi --bind 0.0.0.0:${PORT:-8000} --access-logfile - --error-logfile -"]

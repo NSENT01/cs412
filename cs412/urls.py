@@ -18,9 +18,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
+from django.http import HttpResponse
+from django.views.generic import RedirectView
 from rest_framework_simplejwt import views as jwt_views
 
 urlpatterns = [
+    path('', RedirectView.as_view(url='/sipy/profiles/', permanent=False), name='root'),
+    path('health/', lambda request: HttpResponse('ok'), name='health'),
     path('admin/', admin.site.urls),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     path('api/token/',
