@@ -1,3 +1,7 @@
+# File: sipy/models.py
+# Author: Nithin Senthilvel (nsent01@bu.edu), 6/15/2026
+# Description: Defining the models used in our database
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -101,6 +105,7 @@ class Cafe(models.Model):
         return Ranking.objects.filter(drink__cafe=self).values_list('image', flat=True)
     
     def get_friend_rankings(self, users):
+        '''Return the rankings made by a users friends'''
         rankings = []
 
         for user in users:
@@ -109,6 +114,7 @@ class Cafe(models.Model):
         return rankings
     
     def get_user_rankings(self, user):
+        '''Return the users rankings'''
         rankings = list(Ranking.objects.filter(user=user, drink__cafe=self))
 
         return rankings
@@ -147,6 +153,7 @@ class Ranking(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        '''Define the unqiue constraints of the model for security'''
         constraints = [
             models.UniqueConstraint(fields=['user', 'drink'], name='unique_user_ranking')
         ]
@@ -162,6 +169,7 @@ class WantToTry(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="want_to_try")
 
     class Meta:
+        '''Define the unqiue constraints of the model for security'''
         constraints = [
             models.UniqueConstraint(fields=['user', 'cafe'], name='unique_user_bookmark')
         ]
@@ -176,6 +184,7 @@ class Follow(models.Model):
     followed = models.ForeignKey(User, on_delete=models.CASCADE, related_name="followers")
 
     class Meta:
+        '''Define the unqiue constraints of the model for security'''
         constraints = [
             models.UniqueConstraint(fields=['user', 'followed'], name='unique_user_follow')
         ]
@@ -191,6 +200,7 @@ class Like(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        '''Define the unqiue constraints of the model for security'''
         constraints = [
             models.UniqueConstraint(fields=['user', 'ranking'], name='unique_user_ranking_like')
         ]

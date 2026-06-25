@@ -32,6 +32,12 @@ class ProfileSerializer(serializers.ModelSerializer):
         profile = Profile.objects.create(user=user, **validated_data)
         return profile
 
+class ProfileUpdateSerializer(serializers.ModelSerializer):
+    '''Convert profile update form data into an updated profile'''
+    class Meta:
+        model = Profile
+        fields = ['first_name', 'last_name', 'bio_text', 'profile_image']
+
 class ProfileGetSerializer(serializers.ModelSerializer):
     '''Convert abstract python data objects into JSON to send to the front end'''
     user = UserSerializer(read_only=True)
@@ -41,10 +47,11 @@ class ProfileGetSerializer(serializers.ModelSerializer):
     profile_image = serializers.SerializerMethodField()
     num_followers = serializers.SerializerMethodField()
     num_following = serializers.SerializerMethodField()
+    want_to_try = serializers.SerializerMethodField()
 
     class Meta:
         model = Profile
-        fields = ['id', 'user', 'first_name', 'last_name', 'bio_text', 'profile_image', 'friend_rankings', 'user_rankings', 'num_rankings', 'num_followers', 'num_following']
+        fields = ['id', 'user', 'first_name', 'last_name', 'bio_text', 'profile_image', 'friend_rankings', 'user_rankings', 'num_rankings', 'num_followers', 'num_following', 'want_to_try']
 
     def get_profile_image(self, obj):
         '''Add the profile image to the JSON response'''
@@ -82,6 +89,10 @@ class ProfileGetSerializer(serializers.ModelSerializer):
         '''Add the number of rankings made by a profile to the JSON response'''
 
         return obj.get_num_rankings()
+    
+    def get_want_to_try(self, obj):
+        '''Add the want to try list to the JSON response'''
+        return WantToTrySerializer(obj.get_want_to_try(), many=True, context=self.context).data
 
 
 class CafeSerializer(serializers.ModelSerializer):
@@ -221,6 +232,9 @@ class RankingDisplaySerializer(serializers.ModelSerializer):
     cafe_name = serializers.CharField(source='drink.cafe.name', read_only=True)
     cafe_place_id = serializers.CharField(source='drink.cafe.placeId', read_only=True)
 
+    liked_by_user = serializers.SerializerMethodField()
+    comments = serializers.SerializerMethodField()
+
     user_id = serializers.IntegerField(source='user.id', read_only=True)
     username = serializers.CharField(source='user.username', read_only=True)
     profile_image = serializers.SerializerMethodField()
@@ -239,6 +253,9 @@ class RankingDisplaySerializer(serializers.ModelSerializer):
 
             'cafe_name',
             'cafe_place_id',
+
+            'liked_by_user',
+            'comments',
 
             'user_id',
             'username',
@@ -271,55 +288,155 @@ class RankingDisplaySerializer(serializers.ModelSerializer):
             return request.build_absolute_uri(profile_image.url)
 
         return profile_image.url
+    
+    def get_liked_by_user(self, obj):
+        request = self.context.get('request')
+
+        if not request or not request.user.is_authenticated:
+            return False
+
+        return Like.objects.filter(
+            user=request.user,
+            ranking=obj,
+        ).exists()
+    
+    def get_comments(self, obj):
+        comments = obj.comments.select_related('user', 'user__profile_user').order_by('created_at')
+        return CommentSerializer(comments, many=True, context=self.context).data
 
             
 
 class WantToTrySerializer(serializers.ModelSerializer):
     '''Convert abstract python data on places a user wants to try to JSON for web communication'''
-    cafe = CafeSerializer()
+    cafeId = serializers.CharField(write_only=True)
+    cafe = CafeSerializer(read_only=True)
 
     class Meta:
         '''Define the model to write and read from and the values to write and read'''
         model = WantToTry
-        fields = ['cafe']
+        fields = ['id', 'cafeId', 'cafe']
 
     def create(self, validated_data):
         '''Override the create method to define the user and cafe fields'''
-        cafe_data = validated_data.pop('cafe')
+        cafe_data = validated_data.pop('cafeId')
 
         user = self.context['request'].user
-        cafe = Cafe.objects.get(placeId=cafe_data['placeId'])
+        cafe = Cafe.objects.get(placeId=cafe_data)
 
-        wtt = WantToTry.objects.create(user=user, cafe=cafe)
+        wtt, created = WantToTry.objects.get_or_create(user=user, cafe=cafe, defaults={'user': user, 'cafe': cafe})
         return wtt
     
 class FollowSerializer(serializers.ModelSerializer):
-    '''Convert abstract python data on follow edges to JSON for web comm'''
-    user = UserSerializer()
-    followed = UserSerializer()
+    followed = serializers.CharField(write_only=True)
 
     class Meta:
-        '''Define the model to write and read from and the values to write and read'''
         model = Follow
-        fields = ['user', 'followed']
+        fields = ['followed']
+
+    def create(self, validated_data):
+        followed_username = validated_data.pop('followed')
+
+        user = self.context['request'].user
+        followed = User.objects.get(username=followed_username)
+
+        follow, created = Follow.objects.get_or_create(
+            user=user,
+            followed=followed,
+        )
+
+        return follow
 
 class LikeSerializer(serializers.ModelSerializer):
     '''Convert abstract python data on likes to JSON for web comm'''
-    user = UserSerializer()
-    ranking = RankingSerializer()
+    post = serializers.IntegerField(write_only=True)
 
     class Meta:
         '''Define the model to write and read from and the values to write and read'''
         model = Like
-        fields = ['user', 'ranking', 'created_at']
+        fields = ['id', 'post', 'created_at']
+
+    def create(self, validated_data):
+        '''override create to create an instance'''
+        user = self.context['request'].user
+        ranking_id = validated_data.pop('post')
+        ranking = Ranking.objects.get(id=ranking_id)
+        like, created = Like.objects.get_or_create(user=user, ranking=ranking)
+
+        return like
 
 class CommentSerializer(serializers.ModelSerializer):
     '''Convert abstract python data on comments to JSON for web comm'''
-    user = UserSerializer()
-    ranking = RankingSerializer()
+    ranking_id = serializers.IntegerField(write_only=True, required=False)
+    post = serializers.IntegerField(write_only=True, required=False)
+    user_id = serializers.IntegerField(source='user.id', read_only=True)
+    username = serializers.CharField(source='user.username', read_only=True)
+    profile_image = serializers.SerializerMethodField()
     
     class Meta:
         '''Define the model to write and read from and the values to write and read'''
         model = Comment
-        fields = ['user', 'ranking', 'text', 'created_at']
+        fields = [
+            'id',
+            'ranking_id',
+            'post',
+            'text',
+            'created_at',
+            'user_id',
+            'username',
+            'profile_image',
+        ]
 
+    def create(self, validated_data):
+        '''Override create to attach the logged in user to the comment'''
+        user = self.context['request'].user
+        ranking_id = validated_data.pop('ranking_id', None)
+
+        if ranking_id is None:
+            ranking_id = validated_data.pop('post', None)
+
+        if ranking_id is None:
+            raise serializers.ValidationError({'post': 'This field is required.'})
+
+        try:
+            ranking = Ranking.objects.get(id=ranking_id)
+        except Ranking.DoesNotExist:
+            raise serializers.ValidationError({'post': 'No post exists with this id.'})
+
+        return Comment.objects.create(user=user, ranking=ranking, **validated_data)
+
+    def get_profile_image(self, obj):
+        request = self.context.get('request')
+        profile_image = obj.user.profile_user.profile_image
+
+        if not profile_image:
+            return None
+
+        if request:
+            return request.build_absolute_uri(profile_image.url)
+
+        return profile_image.url
+
+class ProfileSearchSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+    profile_image = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Profile
+        fields = [
+            'id',
+            'username',
+            'first_name',
+            'last_name',
+            'profile_image',
+        ]
+
+    def get_profile_image(self, obj):
+        request = self.context.get('request')
+
+        if not obj.profile_image:
+            return None
+
+        if request:
+            return request.build_absolute_uri(obj.profile_image.url)
+
+        return obj.profile_image.url

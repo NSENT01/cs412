@@ -1,0 +1,26 @@
+{% extends "sipy/base.html" %}
+
+{% block content %}
+    {% if rows %}
+        <table>
+            <thead>
+                <tr>
+                    {% for field in fields %}
+                        <th>{{ field }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                    <tr>
+                        {% for value in row %}
+                            <td>{{ value|default:"-" }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="empty">No records yet.</div>
+    {% endif %}
+{% endblock %}
